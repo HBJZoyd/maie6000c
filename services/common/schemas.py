@@ -10,6 +10,7 @@ from services.common.models import CaseStatus, JobStatus, JobType
 class HealthResponse(BaseModel):
     service: str
     status: str
+    version: str = "0.1.0"
 
 
 class CaseCreate(BaseModel):
