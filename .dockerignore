@@ -5,3 +5,8 @@ __pycache__
 .pytest_cache
 *.pyc
 .env
+RAG
+artifacts
+submissions
+templates
+tooling

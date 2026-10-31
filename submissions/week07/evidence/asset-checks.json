@@ -1,0 +1,20 @@
+[
+  {
+    "asset": "/manual.pdf",
+    "status": 200,
+    "bytes": 8963547,
+    "content_type": "application/pdf"
+  },
+  {
+    "asset": "/manual-images/1aecab60dda51f943c5a320aa3765bc1",
+    "status": 200,
+    "bytes": 3403,
+    "content_type": "image/jpeg"
+  },
+  {
+    "asset": "/manual-images/d7312461bc57cd814ec24e176d4bd393",
+    "status": 200,
+    "bytes": 20165,
+    "content_type": "image/jpeg"
+  }
+]

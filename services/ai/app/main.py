@@ -3,16 +3,27 @@ from __future__ import annotations
 import logging
 from time import perf_counter
 
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, HTTPException, Response
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
 
 from services.common.config import configure_logging
-from services.common.schemas import HealthResponse, TriageRequest, TriageResponse
+from services.common.rag_client import (
+    RagUnavailable,
+    manual_backend_status,
+    query_manual,
+)
+from services.common.schemas import (
+    HealthResponse,
+    RagAnswer,
+    RagRequest,
+    TriageRequest,
+    TriageResponse,
+)
 
 configure_logging()
 logger = logging.getLogger("services.ai.main")
 
-app = FastAPI(title="MAIE 6000C Starter AI Service", version="0.1.0")
+app = FastAPI(title="Model 3 AI Gateway", version="0.2.0")
 
 TRIAGE_REQUESTS = Counter("ai_triage_requests_total", "Total triage requests", ["label"])
 TRIAGE_LATENCY = Histogram("ai_triage_duration_seconds", "Triage duration in seconds")
@@ -85,3 +96,16 @@ def triage(payload: TriageRequest) -> TriageResponse:
         },
     )
     return result
+
+
+@app.get("/rag/status")
+def rag_status() -> dict:
+    return manual_backend_status()
+
+
+@app.post("/rag/query", response_model=RagAnswer)
+def rag_query(payload: RagRequest) -> RagAnswer:
+    try:
+        return query_manual(payload.question, payload.case_id)
+    except RagUnavailable as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc

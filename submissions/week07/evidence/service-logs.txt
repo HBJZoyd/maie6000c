@@ -1,0 +1,80 @@
+ai-1  | {"asctime": "2026-10-31 07:54:26,177", "levelname": "INFO", "service": null, "name": "httpx", "message": "HTTP Request: GET http://host.docker.internal:6001/health/ready \"HTTP/1.1 200 OK\""}
+ai-1  | INFO:     172.18.0.4:33982 - "GET /rag/status HTTP/1.1" 200 OK
+ai-1  | INFO:     127.0.0.1:48780 - "GET /health/live HTTP/1.1" 200 OK
+ai-1  | {"asctime": "2026-10-31 07:54:35,907", "levelname": "INFO", "service": null, "name": "httpx", "message": "HTTP Request: POST http://host.docker.internal:6001/rag/query \"HTTP/1.1 200 OK\""}
+ai-1  | INFO:     172.18.0.5:35646 - "POST /rag/query HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:26,178", "levelname": "INFO", "service": null, "name": "httpx", "message": "HTTP Request: GET http://ai:8100/rag/status \"HTTP/1.1 200 OK\""}
+api-1  | {"asctime": "2026-10-31 07:54:26,180", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/system/status", "status_code": "200", "duration_seconds": 0.1546}
+api-1  | INFO:     172.18.0.1:43348 - "GET /system/status HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:29,696", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "POST", "path": "/questions", "status_code": "202", "duration_seconds": 0.0154}
+api-1  | INFO:     172.18.0.1:48600 - "POST /questions HTTP/1.1" 202 Accepted
+api-1  | {"asctime": "2026-10-31 07:54:30,049", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/health/live", "status_code": "200", "duration_seconds": 0.0004}
+api-1  | INFO:     127.0.0.1:34752 - "GET /health/live HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:31,163", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0033}
+api-1  | INFO:     172.18.0.1:48612 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:31,167", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0025}
+api-1  | INFO:     172.18.0.1:48622 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48634 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:31,472", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0024}
+api-1  | {"asctime": "2026-10-31 07:54:31,504", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0019}
+api-1  | INFO:     172.18.0.1:48644 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48648 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:31,824", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0027}
+api-1  | {"asctime": "2026-10-31 07:54:31,838", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0019}
+api-1  | INFO:     172.18.0.1:48658 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48660 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:32,166", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0024}
+api-1  | {"asctime": "2026-10-31 07:54:32,170", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0016}
+api-1  | INFO:     172.18.0.1:48676 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:32,475", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0027}
+api-1  | INFO:     172.18.0.1:48690 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:32,493", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0017}
+api-1  | INFO:     172.18.0.1:48700 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:32,798", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0022}
+api-1  | INFO:     172.18.0.1:48706 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:32,801", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0015}
+api-1  | INFO:     172.18.0.1:48708 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48720 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:33,105", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0022}
+api-1  | {"asctime": "2026-10-31 07:54:33,119", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0017}
+api-1  | INFO:     172.18.0.1:48728 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48744 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:33,424", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0025}
+api-1  | {"asctime": "2026-10-31 07:54:33,449", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0017}
+api-1  | INFO:     172.18.0.1:48750 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:33,753", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0023}
+api-1  | INFO:     172.18.0.1:48754 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:33,757", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0017}
+api-1  | INFO:     172.18.0.1:48762 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,081", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0024}
+api-1  | INFO:     172.18.0.1:48776 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,087", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0016}
+api-1  | INFO:     172.18.0.1:48778 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,393", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0022}
+api-1  | INFO:     172.18.0.1:48780 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,398", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0015}
+api-1  | INFO:     172.18.0.1:48796 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,715", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0022}
+api-1  | INFO:     172.18.0.1:48802 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:34,725", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0016}
+api-1  | INFO:     172.18.0.1:48816 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:35,030", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0029}
+api-1  | INFO:     172.18.0.1:48828 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:35,048", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0017}
+api-1  | INFO:     172.18.0.1:48832 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:35,353", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0022}
+api-1  | INFO:     172.18.0.1:48836 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:35,377", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0018}
+api-1  | INFO:     172.18.0.1:48848 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48852 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:35,686", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0026}
+api-1  | {"asctime": "2026-10-31 07:54:35,695", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0019}
+api-1  | INFO:     172.18.0.1:48854 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:36,000", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/questions/a17d3240-be02-445c-84a6-10abd6690fd8", "status_code": "200", "duration_seconds": 0.0027}
+api-1  | INFO:     172.18.0.1:48858 - "GET /questions/a17d3240-be02-445c-84a6-10abd6690fd8 HTTP/1.1" 200 OK
+api-1  | INFO:     172.18.0.1:48874 - "GET /jobs/9 HTTP/1.1" 200 OK
+api-1  | {"asctime": "2026-10-31 07:54:36,005", "levelname": "INFO", "service": null, "name": "services.api.main", "message": "request_completed", "method": "GET", "path": "/jobs/9", "status_code": "200", "duration_seconds": 0.0018}
+worker-1  | {"asctime": "2026-10-31 07:54:31,591", "levelname": "INFO", "service": null, "name": "services.worker.main", "message": "worker_started", "poll_seconds": 2.0, "ai_service_url": "http://ai:8100"}
+worker-1  | {"asctime": "2026-10-31 07:54:31,615", "levelname": "INFO", "service": null, "name": "services.worker.main", "message": "job_claimed", "job_id": 9, "case_id": "a17d3240-be02-445c-84a6-10abd6690fd8"}
+worker-1  | {"asctime": "2026-10-31 07:54:35,908", "levelname": "INFO", "service": null, "name": "httpx", "message": "HTTP Request: POST http://ai:8100/rag/query \"HTTP/1.1 200 OK\""}
+worker-1  | {"asctime": "2026-10-31 07:54:35,914", "levelname": "INFO", "service": null, "name": "services.worker.main", "message": "job_completed", "job_id": 9, "question": true}

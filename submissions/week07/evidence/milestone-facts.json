@@ -1,0 +1,15 @@
+{
+  "team": "Odie",
+  "date": "2026-10-31",
+  "case_id": "a17d3240-be02-445c-84a6-10abd6690fd8",
+  "job_id": 9,
+  "queue_seconds": 1.921,
+  "processing_seconds": 4.301,
+  "total_seconds": 6.222,
+  "cite_pages": [
+    39,
+    115
+  ],
+  "unit_tests": 18,
+  "live_smoke_tests": 2
+}

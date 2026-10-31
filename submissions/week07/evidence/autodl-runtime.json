@@ -1,0 +1,56 @@
+{
+  "captured_at_utc": "2026-10-31T07:58:36.358280+00:00",
+  "method": "Authenticated SSH read-only commands and SFTP file reads",
+  "commands": {
+    "gpu": {
+      "command": "nvidia-smi --query-gpu=name,memory.used,memory.total --format=csv,noheader",
+      "exit_code": 0,
+      "stdout": "NVIDIA A100-PCIE-40GB, 32529 MiB, 40960 MiB\n",
+      "stderr": ""
+    },
+    "llm_models": {
+      "command": "curl -fsS http://127.0.0.1:8000/v1/models",
+      "exit_code": 0,
+      "stdout": "{\"object\":\"list\",\"data\":[{\"id\":\"LLaMA-Factory-main/output/qwen3_lora_sft_int4\",\"object\":\"model\",\"created\":1793433516,\"owned_by\":\"vllm\",\"root\":\"LLaMA-Factory-main/output/qwen3_lora_sft_int4\",\"parent\":null,\"max_model_len\":8192,\"permission\":[{\"id\":\"modelperm-07d97246415242a3ab0ad5f1147e0841\",\"object\":\"model_permission\",\"created\":1793433516,\"allow_create_engine\":false,\"allow_sampling\":true,\"allow_logprobs\":true,\"allow_search_indices\":false,\"allow_view\":true,\"allow_fine_tuning\":false,\"organization\":\"*\",\"group\":null,\"is_blocking\":false}]}]}",
+      "stderr": ""
+    },
+    "gateway_ready": {
+      "command": "curl -fsS http://127.0.0.1:6001/health/ready",
+      "exit_code": 0,
+      "stdout": "{\"status\":\"ready\",\"pipeline\":\"bm25-milvus-rerank-llm\"}",
+      "stderr": ""
+    },
+    "python": {
+      "command": "/root/miniconda3/envs/rag/bin/python --version",
+      "exit_code": 0,
+      "stdout": "Python 3.12.13\n",
+      "stderr": ""
+    }
+  },
+  "source_files": {
+    "infer.py": {
+      "sha256": "356785af936b4059ef5cd304f6c591bc5357b872a36b4f9e7d37cc44f6070cac",
+      "bytes": 2122
+    },
+    "maie_rag_gateway.py": {
+      "sha256": "068331b1caf0ed3f4496e65ba78c6b3879b53d3565f3add4861b09c314fe7302",
+      "bytes": 8809
+    },
+    "src/constant.py": {
+      "sha256": "c65d24f666eea1f1d5dfb5c741e46a0c03ee110d99241e1315fe5124cd14c7ff",
+      "bytes": 1640
+    },
+    "src/client/llm_local_client.py": {
+      "sha256": "0a2b6ed1b7cd7c70873f9646e1d4ac179e1b907b2e4ce6ac7e155b9bdd960b7a",
+      "bytes": 3081
+    },
+    "src/retriever/milvus_retriever.py": {
+      "sha256": "b55dd13512504be84511c4d371140b77e975a63cd3a1fd196c5ea02ab57164ea",
+      "bytes": 6142
+    },
+    "src/reranker/bge_m3_reranker.py": {
+      "sha256": "b2814b08c5952937ccab43389ead9547ff5388796a357a7ea5feb673ad30ac10",
+      "bytes": 1924
+    }
+  }
+}

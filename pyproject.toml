@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "maie6000c-starter-template"
 version = "0.1.0"
-description = "Starter template for MAIE 6000C"
+description = "MAIE asynchronous Tesla Model 3 manual question answering"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
 dependencies = [
@@ -31,7 +31,11 @@ dev = [
 [tool.setuptools.packages.find]
 include = ["services", "services.*"]
 
+[tool.setuptools.package-data]
+"services.api" = ["web/*.html", "web/*.css", "web/*.js"]
+
 [tool.pytest.ini_options]
+pythonpath = ["."]
 markers = [
   "smoke: tests that require a running stack",
 ]
@@ -40,6 +44,7 @@ testpaths = ["tests"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+extend-exclude = ["RAG", "artifacts"]
 
 [tool.ruff.lint]
 select = ["E", "F"]

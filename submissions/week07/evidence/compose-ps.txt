@@ -1,0 +1,5 @@
+NAME                 IMAGE                COMMAND                  SERVICE   CREATED              STATUS                        PORTS
+maie6000c-ai-1       maie6000c-ai         "uvicorn services.ai…"   ai        About a minute ago   Up About a minute (healthy)   127.0.0.1:8100->8100/tcp
+maie6000c-api-1      maie6000c-api        "/bin/sh -c 'alembic…"   api       About a minute ago   Up About a minute (healthy)   127.0.0.1:8000->8000/tcp
+maie6000c-db-1       postgres:16-alpine   "docker-entrypoint.s…"   db        8 days ago           Up About a minute (healthy)   127.0.0.1:5432->5432/tcp
+maie6000c-worker-1   maie6000c-worker     "python -m services.…"   worker    About a minute ago   Up 56 seconds                 

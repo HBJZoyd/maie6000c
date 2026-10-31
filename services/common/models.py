@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 from enum import StrEnum
 
-from sqlalchemy import DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from services.common.db import Base
@@ -18,6 +18,8 @@ class CaseStatus(StrEnum):
     NEW = "new"
     QUEUED = "queued"
     TRIAGED = "triaged"
+    PROCESSING = "processing"
+    ANSWERED = "answered"
     FAILED = "failed"
 
 
@@ -30,6 +32,7 @@ class JobStatus(StrEnum):
 
 class JobType(StrEnum):
     TRIAGE_CASE = "triage_case"
+    ANSWER_QUESTION = "answer_question"
 
 
 class Case(Base):
@@ -51,6 +54,10 @@ class Case(Base):
     ai_label: Mapped[str | None] = mapped_column(String(50), nullable=True)
     ai_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     ai_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)
+    answer: Mapped[str | None] = mapped_column(Text, nullable=True)
+    cite_pages: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    sources: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    related_images: Mapped[list | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utcnow,

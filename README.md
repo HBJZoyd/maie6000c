@@ -1,195 +1,111 @@
-# Tesla Model 3 Manual Q&A — RAG + Async Processing Architecture
+# Model 3 Manual Assistant
 
-## 1. Project Introduction
+A manual-grounded question-answering prototype with a browser UI, durable PostgreSQL
+jobs, an asynchronous worker, and an existing GPU RAG pipeline hosted on AutoDL.
+**Team: Odie. Course: MAIE6000C, Engineering AI Products: From Prototype to Production.**
+MAIE6000C is the course name, not the product name. This student prototype is not
+affiliated with Tesla and does not control a vehicle.
 
-This project is a Retrieval-Augmented Generation (RAG) question-answering system built on an asynchronous processing architecture. It allows Tesla Model 3 owners to ask natural-language questions about vehicle operation and receive concise, cited answers sourced from the official owner's manual.
+## Current working path
 
-The system follows a three-service architecture:
+Open `http://localhost:8000/app`. The browser submits `POST /questions`. The API
+commits a question and a pending job, then returns HTTP 202. The worker claims the
+job, calls the local AI gateway, and that gateway calls AutoDL through SSH port
+forwarding. The answer, citation pages, source excerpts, and image metadata are
+committed to PostgreSQL and can be read from history.
 
-- **API Service** (port 8000) — receives user questions, creates cases and background jobs, returns processed results
-- **AI Service** (port 8100) — calls the RAG service to generate answers, returns labels/summaries/confidence
-- **Worker** — polls pending jobs, claims and processes them, calls the AI service, writes results back to the database
-- **RAG Service** (port 6001) — encapsulates the full retrieval-augmented generation pipeline: BM25 recall, Milvus hybrid search, BGE-M3 reranking, and LLM generation
+The legacy `/cases` and `/triage` endpoints retain the starter's keyword triage
+example for compatibility. They do **not** perform the manual RAG workflow.
 
-The business flow: user submits a question via `POST /cases` → API writes case (status=`queued`) + job (status=`pending`) to PostgreSQL → Worker claims the job → calls AI Service → AI Service calls RAG → RAG retrieves relevant manual passages and generates a cited answer → Worker writes `ai_label`/`ai_summary`/`ai_confidence` back to the case → case status becomes `triaged`.
+## Quick start: Windows and the provisioned AutoDL instance
 
-## 2. Quick Start
+Requirements: Docker Desktop with its Linux engine running, OpenSSH, the existing
+AutoDL `rag` Conda environment and provisioned manual/model/index assets. Local
+application containers use Python 3.11. Large model weights, the manual PDF,
+indexes, MongoDB data, private configuration, and passwords are not in Git.
 
-### Prerequisites
+In local PowerShell, from the repository root:
 
-- Docker Desktop (with Docker Compose)
-- `.env` file configured (copy from `.env.example`)
+```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+docker --context default compose up -d --build --wait
+```
 
-### Start the Starter Stack
+In a separate SSH terminal, start dependencies **once after an AutoDL reboot**:
 
 ```bash
-# 1. Copy environment file
-cp .env.example .env
-
-# 2. Start all services (db + ai + api + worker)
-docker compose up --build
-
-# 3. Optional: enable observability profile (Prometheus)
-docker compose --profile observability up --build
+cd /root/autodl-tmp/RAG
+source /root/miniconda3/etc/profile.d/conda.sh
+source config.ini
+curl -fsS http://127.0.0.1:8000/v1/models
 ```
 
-### Verify the Stack
+`config.ini` is the existing private instance configuration. Inspect readiness
+before starting duplicate processes. The semantic-chunk service is an indexing
+dependency and is not required to answer against the existing indexes.
 
-```bash
-# Check API health
-curl http://localhost:8000/health/ready
+In a second local PowerShell terminal, start the gateway and SSH tunnel:
 
-# Create a case (starts the workflow)
-curl -X POST http://localhost:8000/cases \
-  -H "Content-Type: application/json" \
-  -d '{"title":"How to enable auto-lock","description":"When I walk away from the car, it does not lock automatically."}'
-
-# Check worker logs
-docker logs -f maie6000c-worker-1
-
-# Query final state via API
-curl http://localhost:8000/cases/<CASE_ID>
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\connect-rag.ps1 -SshHost region-9.autodl.pro -Port 16814 -RemotePython /root/miniconda3/envs/rag/bin/python
 ```
 
-### Stop the Stack
+Enter the password only at the SSH prompt. The process-specific execution policy
+does not change the machine's permanent policy. Keep this terminal open. If a
+gateway is already running on AutoDL, use the tunnel-only command in the operations
+guide instead of launching another copy.
 
-```bash
-# Stop and remove containers
-docker compose down --remove-orphans
-
-# Stop and remove volumes (full reset)
-docker compose down -v --remove-orphans
+```powershell
+Invoke-RestMethod http://localhost:8000/system/status
 ```
 
-## 3. Tech Stack
+Expect `api`, `database`, and `rag` to be `ready`. Open `/app` and ask about Sentry
+Mode. This check reports connectivity and initialized retrieval, not answer accuracy.
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| API Service | FastAPI + Uvicorn | HTTP endpoints for case CRUD and job queries (port 8000) |
-| AI Service | FastAPI + Uvicorn | Internal AI gateway, calls RAG service (port 8100) |
-| RAG Service | FastAPI + Uvicorn | RAG pipeline: retrieval + reranking + LLM generation (port 6001) |
-| Worker | Python polling loop | Async job processing, claim → process → complete/fail |
-| Database | PostgreSQL 16 | Relational persistence for `cases` and `jobs` tables |
-| ORM/Migration | SQLAlchemy 2.0 + Alembic | Model definitions and schema migrations |
-| Vector Store | Milvus | BGE-M3 dense+sparse hybrid vector search |
-| Document Store | MongoDB 7.0 | Storage for manual document chunks and metadata |
-| Sparse Retrieval | BM25 (jieba + pickle) | Keyword-based recall as supplement to vector search |
-| Reranker | BGE-M3 (Qwen3-Reranker) | Fine-grained relevance scoring of retrieved passages |
-| LLM | Doubao API (OpenAI-compatible) | Answer generation with retrieved context |
-| Deployment | Docker Compose | Reproducible local multi-service orchestration |
-| Testing | pytest | Unit, integration, and smoke tests |
-| Observability | Prometheus + structured logging | Metrics, health checks, structured JSON logs |
+## Documentation and milestone entry points
 
-## 4. Directory Structure
+- [Architecture and design decisions](docs/architecture.md)
+- [Operations and troubleshooting](docs/operations.md)
+- [Chinese startup walkthrough](docs/startup-zh.md)
+- [W07 milestone report and evidence index](submissions/week07/README.md)
+- [W07 demo runbook](submissions/week07/DEMO_RUNBOOK.md)
+- [Pre-existing backend and assets](RAG/PROVENANCE.md)
+- [Submission commands](submissions/week07/SUBMIT_COMMANDS.md)
 
-```text
-maie6000c/
-│
-├─ services/                     # ── Starter services ──
-│  ├─ api/app/main.py             #   API service (port 8000)
-│  ├─ ai/app/main.py              #   AI service (port 8100)
-│  ├─ worker/app/main.py          #   Worker process (polling loop)
-│  └─ common/                     #   Shared code (models, db, config, schemas)
-│
-├─ alembic/                       # ── Database migrations ──
-│  └─ versions/                   #   Migration scripts
-│
-├─ tests/                         # ── Test suite ──
-│  ├─ unit/                       #   Unit tests (AI logic)
-│  ├─ integration/                #   Integration tests (API + DB)
-│  └─ smoke/                      #   Smoke tests (end-to-end against running stack)
-│
-├─ docs/                          # ── Documentation ──
-│  ├─ architecture.md             #   Architecture (English)
-│  ├─ architecture_zh.md           #   Architecture (Chinese)
-│  ├─ operations.md               #   Operations manual
-│  └─ adrs/                       #   Architecture Decision Records
-│
-├─ submissions/                   # ── Milestone submissions ──
-│  ├─ week03/                     #   Individual readiness lab
-│  └─ week04/                     #   Team architecture proposal
-│
-├─ compose.yaml                   # Docker Compose orchestration
-├─ Dockerfile                     # Python 3.11-slim image
-├─ pyproject.toml                 # Python project config (deps, ruff, pytest)
-├─ Makefile                       # Shortcut commands
-└─ README.md                      # This file
-│
-├─ RAG/                           # ── RAG subsystem (separate) ──
-│  ├─ infer.py                     #   Interactive RAG pipeline (CLI)
-│  ├─ build_index.py               #   Build BM25 + Milvus indexes
-│  ├─ config.ini                   #   RAG configuration
-│  ├─ data/                        #   Tesla Manual PDF + stopwords
-│  ├─ models/                      #   Pretrained models (Qwen3-8B, BGE-M3)
-│  ├─ mongodb-7.0.20/              #   Standalone MongoDB binaries
-│  └─ src/
-│     ├─ retriever/                #   BM25/Milvus/FAISS/TF-IDF retrievers
-│     ├─ reranker/                 #   BGE-M3/Qwen3 rerankers
-│     ├─ client/                   #   LLM clients (chat/clean/hyde/local)
-│     ├─ parser/                   #   PDF parsing + image handling
-│     ├─ server/                   #   Semantic chunk service (port 6000)
-│     └─ utils.py                  #   Utility functions
-│
-└─ observability/                 # ── Observability config ──
-   └─ prometheus.yml               #   Prometheus scrape config
+## Tests
+
+On a Python 3.11 development environment:
+
+```powershell
+python -m pip install -e '.[dev]'
+python -m pytest -q tests/unit tests/integration
+python -m ruff check .
 ```
 
-### Starter vs RAG
+For real running-service tests, including the GPU backend:
 
-| Aspect | Starter (`services/`, `alembic/`, `tests/`) | RAG (`RAG/`) |
-|--------|---------------------------------------------|--------------|
-| Purpose | Async job processing architecture | Knowledge retrieval and answer generation |
-| Database | PostgreSQL (cases, jobs) | MongoDB (documents), Milvus (vectors) |
-| Services | API, AI, Worker | RAG service, semantic chunk service |
-| Dependencies | FastAPI, SQLAlchemy, psycopg | BM25, Milvus, BGE-M3, LLM API |
-| Integration | AI Service calls RAG via `POST /rag/query` | RAG returns answer/label/confidence |
-
-## 5. Core Features
-
-### Asynchronous Case Processing
-
-- `POST /cases` creates a case (status=`queued`) and a job (status=`pending`) in one transaction
-- Worker polls pending jobs, claims them (status=`claimed`), and processes them outside the request cycle
-- Results are written back asynchronously; the API returns immediately without waiting for AI processing
-
-### RAG-Powered Answer Generation
-
-- BM25 sparse retrieval (keyword recall) + Milvus hybrid search (BGE-M3 dense+sparse)
-- RRF merge and dedup of multi-source retrieved passages
-- BGE-M3 reranker for fine-grained relevance scoring
-- LLM generates cited answers using retrieved manual context
-- Answer, label, confidence, and source citations persisted to the case
-
-### State Management
-
-| Entity | States | Flow |
-|--------|--------|------|
-| Case | `queued` → `triaged` / `failed` | Created → AI processed → success or failure |
-| Job | `pending` → `claimed` → `completed` / `failed` | Created → worker claimed → done or error |
-
-### Health Checks & Observability
-
-- Liveness and readiness probes for all services (`/health/live`, `/health/ready`)
-- Prometheus metrics endpoints (`/metrics`)
-- Structured JSON logging with context fields (`job_id`, `case_id`, `label`)
-- Optional observability profile for Prometheus dashboard
-
-### Database Migration
-
-- Alembic-managed schema migrations with version control
-- Initial migration creates `cases` and `jobs` tables
-- Run migrations: `docker compose run --rm api alembic upgrade head`
-
-### Testing
-
-- **Unit tests**: AI triage logic (`tests/unit/test_ai_service.py`)
-- **Integration tests**: Case/Job creation and retrieval (`tests/integration/test_api_case_flow.py`)
-- **Smoke tests**: End-to-end flow against running stack (`tests/smoke/test_smoke_cases.py`)
-
-```bash
-# Run unit + integration tests
-pytest -q
-
-# Run smoke tests against a running stack
-SMOKE_BASE_URL=http://localhost:8000 pytest tests/smoke -q
+```powershell
+$env:SMOKE_BASE_URL = 'http://localhost:8000'
+$env:SMOKE_MANUAL_RAG = '1'
+python -m pytest -q tests/smoke
 ```
+
+The live suite creates demonstration records. Tests use SQLite fixtures for unit
+and contract isolation, while the captured live workflow uses PostgreSQL and real
+AutoDL inference. A live smoke test proves service integration, not factual accuracy.
+
+## Source layout
+
+`services/api` serves HTTP and static UI; `services/worker` runs jobs;
+`services/ai` implements the HTTP boundary to RAG; `services/common` contains
+models, schemas and configuration; `scripts/rag_gateway.py` wraps the existing
+AutoDL pipeline; `alembic/versions` records database migrations; `RAG/src` and
+`RAG/infer.py` retain the pre-existing backend source snapshot.
+
+## Scope and limitations
+
+This is a single-user engineering prototype. New answers and manual files require
+the GPU backend and SSH tunnel; previously saved answer text and source excerpts
+remain readable locally. There is no measured accuracy score, model confidence,
+per-vehicle version matching, user authentication or automatic safety escalation.
+Review safety-related questions with qualified personnel and the applicable manual.

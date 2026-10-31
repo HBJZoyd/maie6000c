@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     ai_service_url: str = "http://ai:8100"
     worker_poll_seconds: float = 2.0
     worker_request_timeout_seconds: float = 20.0
+    rag_service_url: str = "http://host.docker.internal:6001"
+    rag_api_token: str = ""
+    rag_request_timeout_seconds: float = 180.0
+    rag_max_attempts: int = 3
+    rag_job_lease_seconds: float = 300.0
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

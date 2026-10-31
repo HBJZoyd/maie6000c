@@ -1,0 +1,13 @@
+{
+  "captured_at_utc": "2026-10-31T07:54:25.991520+00:00",
+  "case_id": "a17d3240-be02-445c-84a6-10abd6690fd8",
+  "job_id": 9,
+  "status": "answered",
+  "cite_pages": [
+    39,
+    115
+  ],
+  "source_count": 2,
+  "asset_checks": 3,
+  "timing_note": "Single warm-service observation, not a latency or accuracy benchmark."
+}

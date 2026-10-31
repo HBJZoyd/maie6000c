@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#174f43">
+  <meta name="description" content="基于车主手册的 Tesla Model 3 问答，附原文与页码。">
+  <title>Model 3 车书问答助手</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23174f43'/%3E%3Cpath d='M7 23V9l9 9 9-9v14' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="/app" aria-label="Model 3 车书问答首页"><span class="brand-mark">M</span><span>车书助手<span class="brand-sub">MODEL 3 MANUAL ASSISTANT</span></span></a>
+    <button class="new-button" id="new-question"><span aria-hidden="true">＋</span> 开始新的提问 <span class="key-hint">↵</span></button>
+    <div class="section-label">你的提问 <span id="history-count">0</span></div>
+    <nav id="history" class="history" aria-label="历史提问"><p class="empty-history">你的问题和答案会保存在这里。</p></nav>
+    <div class="sidebar-bottom">
+      <div class="manual-card"><span class="book-icon" aria-hidden="true">▤</span><div><strong>Model 3 车主手册</strong><p>有据可查，才有把握。</p></div></div>
+      <div class="project-label">MAIE6000C 课程项目 <span>·</span> 车书问答</div>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar">
+      <div class="topbar-left"><button class="mobile-history" id="toggle-history" aria-label="显示历史提问" aria-expanded="false">☰</button><span class="breadcrumb">车书问答</span><span class="slash">/</span><strong>Model 3</strong></div>
+      <div class="topbar-right"><span class="connection" id="connection" role="status"><i></i><span>正在检查连接</span></span><a class="manual-link" href="/manual.pdf" target="_blank" rel="noopener">车主手册 <span aria-hidden="true">↗</span></a></div>
+    </header>
+
+    <main id="main">
+      <section class="welcome" id="welcome">
+        <div class="eyebrow"><span></span> YOUR MODEL 3, EXPLAINED.</div>
+        <h1>读懂你的 <em>Model 3。</em></h1>
+        <p class="intro">从一个小问题开始。让车主手册，给你有依据的答案。</p>
+        <div class="vehicle-panel">
+          <div class="vehicle-meta"><span>TESLA</span><strong>Model 3</strong><small>日常用车，一问即知</small></div>
+          <svg class="vehicle" viewBox="0 0 540 190" fill="none" aria-hidden="true">
+            <path d="M38 130c8-18 21-22 59-29l58-48c18-15 35-20 68-20h86c31 0 48 9 70 28l37 35 55 15c17 5 25 15 28 34l-3 9H39l-1-24Z" fill="#e8eddf" stroke="#5f7867" stroke-width="2"/>
+            <path d="m117 99 49-41c15-13 31-17 57-17h82c24 0 41 7 62 25l33 31-283 2Z" fill="#bdccc0" stroke="#5f7867" stroke-width="2"/>
+            <path d="m258 41-1 58M163 56l-10 43M375 99l5 40M248 99v39M52 125l43 4M449 119l32 8M102 146h296" stroke="#7f9683" stroke-width="2"/>
+            <path d="M286 111h22M178 111h22" stroke="#5f7867" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="117" cy="145" r="29" fill="#f1f3eb" stroke="#446354" stroke-width="4"/><circle cx="117" cy="145" r="17" fill="#8ca292"/><circle cx="419" cy="145" r="29" fill="#f1f3eb" stroke="#446354" stroke-width="4"/><circle cx="419" cy="145" r="17" fill="#8ca292"/>
+            <path d="M25 178h486" stroke="#cbd4c2" stroke-width="2"/>
+          </svg>
+          <span class="vehicle-tag">手册驱动 · 附带引用</span>
+        </div>
+        <div class="suggestions-header"><h2>不妨从这里开始</h2><span>选择一个问题，或在下方自由提问</span></div>
+        <div class="suggestions">
+          <button class="suggestion" data-question="Model 3 如何开启哨兵模式？在家停车时可以自动关闭吗？"><span class="topic-icon">◎</span><span><strong>停车更安心</strong><small>哨兵模式如何使用？</small></span><span class="arrow">↗</span></button>
+          <button class="suggestion" data-question="Model 3 如何设置充电上限和预约充电？"><span class="topic-icon">ϟ</span><span><strong>充电有计划</strong><small>如何设置充电上限？</small></span><span class="arrow">↗</span></button>
+          <button class="suggestion" data-question="Model 3 如何开启离车后自动上锁？哪些情况下不会生效？"><span class="topic-icon">⌑</span><span><strong>离车少操心</strong><small>自动上锁如何开启？</small></span><span class="arrow">↗</span></button>
+        </div>
+      </section>
+
+      <section class="conversation" id="conversation" hidden aria-label="问答内容">
+        <div class="question-label">你的问题</div><h1 id="question-text"></h1>
+        <div class="answer-header"><span class="answer-mark">M</span><strong>车书助手</strong><span id="answer-state"></span></div>
+        <div id="answer-content" class="answer-content" aria-live="polite"></div>
+        <div id="source-section" class="source-section" hidden><div class="source-heading"><h2>答案依据</h2><span>点击页码查看原始手册</span></div><div id="page-links" class="page-links"></div><div id="source-excerpts"></div><div id="related-images" class="related-images"></div></div>
+        <div class="answer-actions"><button id="copy-answer" hidden>复制答案</button><button id="retry-question" hidden>重新尝试 ↗</button><span id="answer-time"></span></div>
+      </section>
+      <div class="notice" id="notice" role="alert" hidden></div>
+    </main>
+
+    <footer class="composer-area">
+      <form id="question-form" class="composer">
+        <label for="question-input" class="sr-only">输入你的 Model 3 问题</label>
+        <textarea id="question-input" rows="2" maxlength="4000" placeholder="问问你的 Model 3，例如：哨兵模式怎么用？" required></textarea>
+        <div class="composer-tools"><span><span class="source-dot"></span> Model 3 车主手册</span><div><span id="char-count">0 / 4000</span><button id="send-button" type="submit" aria-label="发送问题" disabled>发送 <span aria-hidden="true">↑</span></button></div></div>
+      </form>
+      <p class="composer-note" id="composer-note">回答依据已收录的手册，功能可能随车型年份、配置及软件版本不同。</p>
+    </footer>
+  </div>
+</body>
+</html>

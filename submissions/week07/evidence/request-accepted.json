@@ -1,0 +1,17 @@
+{
+  "http_status": 202,
+  "body": {
+    "id": "a17d3240-be02-445c-84a6-10abd6690fd8",
+    "question": "Model 3 如何开启哨兵模式？在家停车时可以自动关闭吗？",
+    "status": "queued",
+    "answer": null,
+    "cite_pages": [],
+    "sources": [],
+    "related_images": [],
+    "error": null,
+    "job_id": 9,
+    "attempts": 0,
+    "created_at": "2026-10-31T07:54:29.686036Z",
+    "updated_at": "2026-10-31T07:54:29.686039Z"
+  }
+}

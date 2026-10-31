@@ -216,3 +216,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# AutoDL runtime assets and private original configuration stay off Git.
+RAG/config.ini
+RAG/.*.swp
+RAG/data/
+RAG/models/
+RAG/LLaMA-Factory-main/
+RAG/RAG-Retrieval/
+RAG/mongodb-7.0.20/
+RAG/log/
+.DS_Store
+artifacts/
+**/.build/
+submissions/week07/CANVAS_SUBMISSION.txt
+manual-backup.sql

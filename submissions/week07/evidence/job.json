@@ -1,0 +1,11 @@
+{
+  "id": 9,
+  "case_id": "a17d3240-be02-445c-84a6-10abd6690fd8",
+  "job_type": "answer_question",
+  "status": "completed",
+  "attempts": 1,
+  "error": null,
+  "created_at": "2026-10-31T07:54:29.689036Z",
+  "claimed_at": "2026-10-31T07:54:31.610227Z",
+  "completed_at": "2026-10-31T07:54:35.910780Z"
+}

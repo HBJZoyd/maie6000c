@@ -1,0 +1,23 @@
+{
+  "method": "Worker briefly stopped for the queued SQL snapshot, then restarted.",
+  "states": [
+    {
+      "observed_at_utc": "2026-10-31T07:54:31.168202+00:00",
+      "seconds_since_worker_start": 0.016,
+      "case_status": "queued",
+      "job_status": "pending"
+    },
+    {
+      "observed_at_utc": "2026-10-31T07:54:31.839953+00:00",
+      "seconds_since_worker_start": 0.688,
+      "case_status": "processing",
+      "job_status": "claimed"
+    },
+    {
+      "observed_at_utc": "2026-10-31T07:54:36.006643+00:00",
+      "seconds_since_worker_start": 4.844,
+      "case_status": "answered",
+      "job_status": "completed"
+    }
+  ]
+}

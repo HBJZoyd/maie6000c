@@ -1,5 +1,11 @@
 # 架构文档 — Tesla Model 3 手册问答系统（RAG）
 
+> **历史方案：本文件保留 Week 04 的架构提案，不代表 W07 的实际实现。**
+> 现行架构、接口、状态机和部署方式请以 [architecture.md](architecture.md) 与
+> [W07 里程碑报告](../submissions/week07/README.md) 为准。当前车书入口为 `/questions`，
+> 使用独立的 `answer_question` 任务；旧 `/cases` 与 `/triage` 仍用于关键词分类示例。
+> 实际模型为 AutoDL 上的本地 vLLM Qwen3，向量库为 Milvus Lite 文件。
+
 ## 1. 问题陈述与主要用户
 
 ### 问题
