@@ -1,5 +1,9 @@
 # 车书问答工程：运行与部署
 
+> 本文保留 W07 部署背景。当前启动、任务恢复和证据格式请参考
+> [当前升级说明](reliability-upgrade.md)。无需 AutoDL 的工程验证入口是
+> CMD 中的 `scripts\start.cmd` 和 http://localhost:8020/app，结果会标记为模拟。
+
 本地页面：http://localhost:8000/app 。浏览器不需要知道远程机器地址或模型密钥。
 
 从 AutoDL 与本机都关闭的状态重新启动时，按 [完整启动流程](startup-zh.md) 操作；其中包含原有 `cd /root/autodl-tmp/RAG`、`source config.ini` 与 Windows CMD 命令。

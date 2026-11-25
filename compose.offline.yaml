@@ -1,0 +1,37 @@
+# Isolated, explicitly synthetic engineering environment. No GPU / SSH needed.
+services:
+  db:
+    extends: {file: compose.yaml, service: db}
+    ports: !reset []
+    volumes: !override [offline_postgres:/var/lib/postgresql/data]
+  ai:
+    extends: {file: compose.yaml, service: ai}
+    ports: !reset []
+    environment:
+      RAG_SERVICE_URL: http://rag:6001
+      RAG_API_TOKEN: offline-local-test
+    depends_on:
+      rag: {condition: service_healthy}
+  api:
+    extends: {file: compose.yaml, service: api}
+    ports: !override ["127.0.0.1:${OFFLINE_API_PORT:-8020}:8000"]
+    environment:
+      RAG_SERVICE_URL: http://rag:6001
+      RAG_API_TOKEN: offline-local-test
+  worker:
+    extends: {file: compose.yaml, service: worker}
+  rag:
+    build: .
+    command: python -m scripts.rag_gateway --mode fixture --rag-dir /runtime --host 0.0.0.0
+    environment:
+      APP_ENV: development
+      RAG_API_TOKEN: offline-local-test
+    volumes: [offline_rag:/runtime]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; r=urllib.request.Request('http://localhost:6001/health/ready',headers={'Authorization':'Bearer offline-local-test'}); urllib.request.urlopen(r)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+volumes:
+  offline_postgres:
+  offline_rag:

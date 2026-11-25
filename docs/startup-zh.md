@@ -1,5 +1,10 @@
 # 完整启动流程：AutoDL RAG + 本地车书问答应用
 
+> 以下保留为 W07 旧部署说明。当前版本的网关需要资产清单和 v2 证据格式，
+> 请优先参考[当前启动与升级说明](reliability-upgrade.md)。无需 AutoDL 时，
+> 在项目目录的 CMD 执行 `scripts\start.cmd`，打开 http://localhost:8020/app；
+> 该环境明确使用模拟结果，不能作为真实 AI 验证。
+
 > W07 采集证据时已在 AutoDL 启动后台网关。如果它仍在运行，只需保持或重新建立
 > SSH 隧道，不要再启动第二份网关。两种启动模式及判定方法见 [operations.md](operations.md)。
 

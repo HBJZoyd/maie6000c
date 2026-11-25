@@ -42,7 +42,7 @@ def post_processing(response, docs):
     related_images = []
     pages = []
     for index in cites:
-        if index > len(docs):
+        if not 1 <= index <= len(docs):
             continue
         images = docs[index-1].metadata["images_info"]
         pages.append(docs[index-1].metadata["page"])

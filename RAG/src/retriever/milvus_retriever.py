@@ -45,12 +45,14 @@ class MilvusRetriever:
 
         if not retrieve and utility.has_collection(COL_NAME):
             Collection(COL_NAME).drop()
-        self.col = Collection(COL_NAME, schema, consistency_level="Strong")
+        self.col = (Collection(COL_NAME) if retrieve else
+                    Collection(COL_NAME, schema, consistency_level="Strong"))
 
         sparse_index = {"index_type": "SPARSE_INVERTED_INDEX", "metric_type": "IP"}
         dense_index = {"index_type": "AUTOINDEX", "metric_type": "IP"}
-        self.col.create_index("sparse_vector", sparse_index)
-        self.col.create_index("dense_vector", dense_index)
+        if not retrieve:
+            self.col.create_index("sparse_vector", sparse_index)
+            self.col.create_index("dense_vector", dense_index)
         self.col.load()
 
         # 如果是非检索阶段，先构建索引

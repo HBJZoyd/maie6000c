@@ -29,7 +29,7 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["services", "services.*"]
+include = ["services", "services.*", "scripts", "scripts.*"]
 
 [tool.setuptools.package-data]
 "services.api" = ["web/*.html", "web/*.css", "web/*.js"]

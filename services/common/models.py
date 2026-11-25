@@ -4,7 +4,9 @@ import uuid
 from datetime import datetime, timezone
 from enum import StrEnum
 
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import (
+    JSON, DateTime, Float, ForeignKey, Index, Integer, String, Text, UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from services.common.db import Base
@@ -37,6 +39,7 @@ class JobType(StrEnum):
 
 class Case(Base):
     __tablename__ = "cases"
+    __table_args__ = (Index("uq_cases_idempotency_key", "idempotency_key", unique=True),)
 
     id: Mapped[str] = mapped_column(
         String(36),
@@ -58,6 +61,8 @@ class Case(Base):
     cite_pages: Mapped[list | None] = mapped_column(JSON, nullable=True)
     sources: Mapped[list | None] = mapped_column(JSON, nullable=True)
     related_images: Mapped[list | None] = mapped_column(JSON, nullable=True)
+    answer_payload: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    idempotency_key: Mapped[str | None] = mapped_column(String(128), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=utcnow,
@@ -78,6 +83,7 @@ class Case(Base):
 
 class Job(Base):
     __tablename__ = "jobs"
+    __table_args__ = (Index("ix_jobs_pending_schedule", "status", "next_run_at", "created_at"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     case_id: Mapped[str] = mapped_column(
@@ -97,6 +103,10 @@ class Job(Base):
         index=True,
     )
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    generation: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    claim_token: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    heartbeat_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    next_run_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     error: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -119,3 +129,17 @@ class Job(Base):
     )
 
     case: Mapped[Case] = relationship(back_populates="jobs")
+
+
+class JobAttempt(Base):
+    __tablename__ = "job_attempts"
+    __table_args__ = (UniqueConstraint("job_id", "generation"),)
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    job_id: Mapped[int] = mapped_column(ForeignKey("jobs.id", ondelete="CASCADE"), index=True)
+    generation: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(30), default="running")
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    error_code: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    error: Mapped[str | None] = mapped_column(Text, nullable=True)

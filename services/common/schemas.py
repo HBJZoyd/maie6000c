@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+
+from scripts.rag_evidence import validate_payload
 
 from services.common.models import CaseStatus, JobStatus, JobType
 
@@ -38,6 +41,8 @@ class JobRead(BaseModel):
     job_type: JobType
     status: JobStatus
     attempts: int
+    generation: int = 0
+    next_run_at: datetime | None = None
     error: str | None = None
     created_at: datetime
     claimed_at: datetime | None = None
@@ -79,6 +84,30 @@ class ManualSource(BaseModel):
     page: int = Field(ge=1)
     excerpt: str = Field(default="", max_length=4000)
     title: str = "Model 3 车主手册"
+    chunk_id: str
+    excerpt_sha256: str
+    manual_id: str
+    manual_version: str
+    document_sha256: str
+
+
+class ManualIdentity(BaseModel):
+    manual_id: str = Field(min_length=1, max_length=100)
+    manual_version: str = Field(min_length=1, max_length=200)
+    document_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    page_count: int = Field(ge=1)
+
+
+class AnswerStep(BaseModel):
+    text: str = Field(min_length=1, max_length=8000)
+    source_ids: list[str] = Field(min_length=1, max_length=100)
+
+
+class GenerationProvenance(BaseModel):
+    model_id: str = Field(min_length=1, max_length=300)
+    index_version: str = Field(min_length=1, max_length=200)
+    prompt_version: str = Field(min_length=1, max_length=100)
+    mode: Literal["live", "fixture"]
 
 
 class ManualImage(BaseModel):
@@ -92,10 +121,20 @@ class RagRequest(QuestionCreate):
 
 
 class RagAnswer(BaseModel):
+    schema_version: Literal[2]
+    answer_type: Literal["answered", "needs_clarification", "insufficient_evidence"]
+    manual: ManualIdentity
+    provenance: GenerationProvenance
+    steps: list[AnswerStep] = Field(default_factory=list, max_length=100)
     answer: str = Field(min_length=1, max_length=40000)
     cite_pages: list[int] = Field(default_factory=list, max_length=100)
     sources: list[ManualSource] = Field(default_factory=list, max_length=100)
     related_images: list[ManualImage] = Field(default_factory=list, max_length=30)
+
+    @model_validator(mode="after")
+    def evidence_integrity(self):
+        validate_payload(self.model_dump())
+        return self
 
     @field_validator("cite_pages")
     @classmethod
@@ -118,7 +157,13 @@ class QuestionRead(BaseModel):
     status: CaseStatus
     answer: str | None = None
     cite_pages: list[int] = Field(default_factory=list)
-    sources: list[ManualSource] = Field(default_factory=list)
+    # Historic W07 records remain readable without inventing version metadata.
+    sources: list[dict] = Field(default_factory=list)
+    answer_type: str | None = None
+    manual: ManualIdentity | None = None
+    provenance: GenerationProvenance | None = None
+    steps: list[AnswerStep] = Field(default_factory=list)
+    next_run_at: datetime | None = None
     related_images: list[ManualImage] = Field(default_factory=list)
     error: str | None = None
     job_id: int

@@ -1,111 +1,99 @@
 # Model 3 Manual Assistant
 
-A manual-grounded question-answering prototype with a browser UI, durable PostgreSQL
-jobs, an asynchronous worker, and an existing GPU RAG pipeline hosted on AutoDL.
-**Team: Odie. Course: MAIE6000C, Engineering AI Products: From Prototype to Production.**
-MAIE6000C is the course name, not the product name. This student prototype is not
-affiliated with Tesla and does not control a vehicle.
+Team **Odie**, course **MAIE6000C: Engineering AI Products — From Prototype to Production**.
+MAIE6000C is the course name. This independent student prototype does not control
+a vehicle or claim affiliation with Tesla.
 
-## Current working path
+The browser submits a question to FastAPI. One PostgreSQL transaction saves the
+question and pending job before HTTP 202. A worker claims the job, invokes the RAG
+boundary and saves the answer, steps, evidence excerpts and terminal state.
+History survives application restart.
 
-Open `http://localhost:8000/app`. The browser submits `POST /questions`. The API
-commits a question and a pending job, then returns HTTP 202. The worker claims the
-job, calls the local AI gateway, and that gateway calls AutoDL through SSH port
-forwarding. The answer, citation pages, source excerpts, and image metadata are
-committed to PostgreSQL and can be read from history.
+## Start without AutoDL — Windows CMD
 
-The legacy `/cases` and `/triage` endpoints retain the starter's keyword triage
-example for compatibility. They do **not** perform the manual RAG workflow.
+Requirements: Docker Desktop's Linux engine, Docker Compose 2.24.4+ and PowerShell.
+Initial builds download images/packages. No GPU, SSH or AutoDL is needed to use
+the explicitly synthetic engineering environment:
 
-## Quick start: Windows and the provisioned AutoDL instance
+~~~cmd
+cd /d "E:\Users\PC\Desktop\maie6000c"
+scripts\start.cmd
+~~~
 
-Requirements: Docker Desktop with its Linux engine running, OpenSSH, the existing
-AutoDL `rag` Conda environment and provisioned manual/model/index assets. Local
-application containers use Python 3.11. Large model weights, the manual PDF,
-indexes, MongoDB data, private configuration, and passwords are not in Git.
+Open **http://localhost:8020/app**. Its banner and results identify offline fixture
+mode: **no real AI is called and no factual vehicle instructions are provided**.
+The default project is odie-offline, with separate PostgreSQL and result-cache
+volumes. Existing .env, W07 data and historical tags are preserved.
 
-In local PowerShell, from the repository root:
+~~~cmd
+docker --context default compose -p odie-offline -f compose.offline.yaml stop
+~~~
 
-```powershell
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
-docker --context default compose up -d --build --wait
-```
+Run the start command again to resume with saved history. Deleting volumes is not
+a normal stop operation.
 
-In a separate SSH terminal, start dependencies **once after an AutoDL reboot**:
+## Real AI deployment
 
-```bash
-cd /root/autodl-tmp/RAG
-source /root/miniconda3/etc/profile.d/conda.sh
-source config.ini
-curl -fsS http://127.0.0.1:8000/v1/models
-```
+The real backend uses the provisioned Chinese manual, BM25 + Milvus Lite hybrid
+retrieval, BGE reranking and a local vLLM Qwen3 model on AutoDL. Its private model,
+manual, index and MongoDB assets are not in Git. The reference environment is an
+A100 40 GB and a separate Python 3.12 GPU environment; local containers use 3.11.
 
-`config.ini` is the existing private instance configuration. Inspect readiness
-before starting duplicate processes. The semantic-chunk service is an indexing
-dependency and is not required to answer against the existing indexes.
+The new gateway requires an asset manifest and contract-v2 modules. Follow
+[the current deployment runbook](docs/reliability-upgrade.md) to inventory/export
+assets, verify them, start supervised dependencies and establish the SSH tunnel.
+After the real backend is ready:
 
-In a second local PowerShell terminal, start the gateway and SSH tunnel:
+~~~cmd
+scripts\start.cmd -Mode Remote
+~~~
 
-```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\connect-rag.ps1 -SshHost region-9.autodl.pro -Port 16814 -RemotePython /root/miniconda3/envs/rag/bin/python
-```
+This starts the existing maie6000c project using configured ports (normally
+http://localhost:8000/app). Do not run an old CLI and gateway together on one GPU.
+Real GPU startup, JSON generation quality and fresh-GPU reproduction remain
+pending verification while AutoDL is unavailable. Fixture checks do not establish
+real-AI readiness. No automatic fixture fallback is used for failed real requests.
 
-Enter the password only at the SSH prompt. The process-specific execution policy
-does not change the machine's permanent policy. Keep this terminal open. If a
-gateway is already running on AutoDL, use the tunnel-only command in the operations
-guide instead of launching another copy.
+## Verification
 
-```powershell
-Invoke-RestMethod http://localhost:8000/system/status
-```
+Run the isolated unit, integration and real PostgreSQL suite:
 
-Expect `api`, `database`, and `rag` to be `ready`. Open `/app` and ask about Sentry
-Mode. This check reports connectivity and initialized retrieval, not answer accuracy.
+~~~cmd
+docker --context default compose -p odie-verification -f compose.test.yaml up --build --abort-on-container-exit --exit-code-from tests
+docker --context default compose -p odie-verification -f compose.test.yaml down
+~~~
 
-## Documentation and milestone entry points
+With the offline application running, a standard-library Python 3.11+ interpreter
+can verify HTTP, SQL persistence, PDF identity and restart recovery:
 
-- [Architecture and design decisions](docs/architecture.md)
-- [Operations and troubleshooting](docs/operations.md)
-- [Chinese startup walkthrough](docs/startup-zh.md)
-- [W07 milestone report and evidence index](submissions/week07/README.md)
-- [W07 demo runbook](submissions/week07/DEMO_RUNBOOK.md)
-- [Pre-existing backend and assets](RAG/PROVENANCE.md)
-- [Submission commands](submissions/week07/SUBMIT_COMMANDS.md)
+~~~cmd
+python scripts\verify_offline.py --restart
+~~~
 
-## Tests
+The report identifies synthetic mode and real_ai_verified=false.
+Unit tests use labelled fixtures and SQLite; PostgreSQL-specific tests use only
+TEST_POSTGRES_URL with temporary schemas. They skip explicitly if it is absent.
+CI and compose.test.yaml enable these tests. Real-model smoke tests remain opt-in.
 
-On a Python 3.11 development environment:
+## Documentation
 
-```powershell
-python -m pip install -e '.[dev]'
-python -m pytest -q tests/unit tests/integration
-python -m ruff check .
-```
+- [Architecture](docs/architecture.md) and [decision records](docs/adrs/)
+- [Operations](docs/operations.md)
+- [Upgrade, startup and evidence-contract details](docs/reliability-upgrade.md)
+- [Historical W07 report and real-AI evidence](submissions/week07/README.md)
+- [Pre-existing RAG source and asset provenance](RAG/PROVENANCE.md)
 
-For real running-service tests, including the GPU backend:
+## Source and supported scope
 
-```powershell
-$env:SMOKE_BASE_URL = 'http://localhost:8000'
-$env:SMOKE_MANUAL_RAG = '1'
-python -m pytest -q tests/smoke
-```
+services/api serves HTTP/UI, services/worker executes jobs, services/ai
+preserves the AI service boundary, and services/common contains persistence,
+schemas and configuration. scripts/rag_gateway.py is the remote adapter, with
+shared pure-Python evidence, asset and result-store helpers. Alembic migrations
+extend existing data without resetting it. RAG source predates the integration;
+local source changes are distinct from unchanged W07 remote snapshots.
 
-The live suite creates demonstration records. Tests use SQLite fixtures for unit
-and contract isolation, while the captured live workflow uses PostgreSQL and real
-AutoDL inference. A live smoke test proves service integration, not factual accuracy.
-
-## Source layout
-
-`services/api` serves HTTP and static UI; `services/worker` runs jobs;
-`services/ai` implements the HTTP boundary to RAG; `services/common` contains
-models, schemas and configuration; `scripts/rag_gateway.py` wraps the existing
-AutoDL pipeline; `alembic/versions` records database migrations; `RAG/src` and
-`RAG/infer.py` retain the pre-existing backend source snapshot.
-
-## Scope and limitations
-
-This is a single-user engineering prototype. New answers and manual files require
-the GPU backend and SSH tunnel; previously saved answer text and source excerpts
-remain readable locally. There is no measured accuracy score, model confidence,
-per-vehicle version matching, user authentication or automatic safety escalation.
-Review safety-related questions with qualified personnel and the applicable manual.
+Supported scope is single-user, single-manual, single-turn questions with history,
+bounded retries and auditable evidence. Saved history is not multi-turn dialogue.
+There is no measured factual-accuracy score, multi-vehicle version selection,
+public-user authentication or automated safety decision-making. The legacy
+/cases and /triage keyword example remains separate from manual RAG.

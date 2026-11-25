@@ -1,5 +1,11 @@
 # Pre-existing AutoDL RAG source and runtime assets
 
+W13 preparation adds explicit local changes to configurable root paths, inference-only
+index loading and invalid citation handling. New gateway contracts and asset/startup
+tools are team integration work. None of these changes have yet been deployed to or
+verified on AutoDL during this offline pass. W07 remote hashes/snapshots below remain
+historical and are not hashes of the current local implementation.
+
 The RAG implementation and prepared models/indexes existed before the local W07
 integration and were supplied as part of the user's AutoDL project. Team Odie's
 milestone contribution is the HTTP adapter, durable local application integration,

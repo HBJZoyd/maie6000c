@@ -10,7 +10,10 @@ from services.common.schemas import RagAnswer
 
 
 class RagUnavailable(Exception):
-    pass
+    def __init__(self, message, status_code=503, retryable=True, retry_after="2"):
+        super().__init__(message)
+        self.status_code, self.retryable = status_code, retryable
+        self.retry_after = retry_after
 
 
 def rag_headers() -> dict[str, str]:
@@ -36,9 +39,20 @@ def query_manual(question: str, case_id: str | None = None) -> RagAnswer:
         )
         response.raise_for_status()
         return RagAnswer.model_validate(response.json())
+    except httpx.HTTPStatusError as exc:
+        status = exc.response.status_code
+        raise RagUnavailable(
+            "车书问答服务繁忙，请稍后重试。" if status == 429 else "车书问答服务暂时无法回答。",
+            status_code=status if status in {429, 502, 503, 504} else 502,
+            retryable=(status in {429, 502, 503, 504}
+                       and exc.response.headers.get("X-RAG-Retryable") != "false"),
+            retry_after=exc.response.headers.get("Retry-After", "2"),
+        ) from exc
     except httpx.TimeoutException as exc:
         raise RagUnavailable("车书问答服务响应超时，请稍后重试。") from exc
-    except (httpx.HTTPError, ValidationError, ValueError) as exc:
+    except (ValidationError, ValueError) as exc:
+        raise RagUnavailable("车书服务返回的证据信息不完整，请联系管理员。", 502, False) from exc
+    except httpx.HTTPError as exc:
         raise RagUnavailable("车书问答服务暂时不可用，请检查远程服务连接后重试。") from exc
 
 
@@ -50,10 +64,13 @@ def manual_backend_status() -> dict:
             timeout=3.0,
             trust_env=False,
         )
-        ready = response.status_code == 200 and response.json().get("status") == "ready"
+        data = response.json() if response.status_code == 200 else {}
+        ready = (data.get("status") == "ready" and data.get("contract_version") == 2
+                 and data.get("mode") in {"live", "fixture"})
     except (RagUnavailable, httpx.HTTPError, ValueError):
         ready = False
-    return {"status": "ready" if ready else "unavailable", "ready": ready}
+    return {"status": "ready" if ready else "unavailable", "ready": ready,
+            "mode": data.get("mode", "unknown") if ready else "unknown"}
 
 
 def fetch_manual_asset(path: str) -> httpx.Response:

@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from services.common.models import Case, CaseStatus, Job, JobStatus
 
+import httpx
+
 
 def test_question_is_queued_and_separate_from_legacy_cases(client, db_session):
     legacy = client.post("/cases", json={"title": "Legacy case", "description": "Keep this flow."})
@@ -63,6 +65,17 @@ def test_invalid_question_and_unsafe_image_path(client):
     assert client.get("/manual-images/not-an-image").status_code == 404
 
 
+def test_idempotent_submission_and_conflicting_reuse(client):
+    headers = {"Idempotency-Key": "test-submit-1"}
+    body = {"question": "Model 3 哨兵模式如何开启？"}
+    first = client.post("/questions", json=body, headers=headers)
+    second = client.post("/questions", json=body, headers=headers)
+    assert first.json()["id"] == second.json()["id"]
+    assert client.post("/questions", json={"question": "different question"},
+                       headers=headers).status_code == 409
+    assert client.get(f"/questions/{first.json()['id']}/attempts").json() == []
+
+
 def test_question_page_and_assets_are_packaged(client):
     page = client.get("/app")
     assert page.status_code == 200
@@ -70,3 +83,11 @@ def test_question_page_and_assets_are_packaged(client):
     assert "Model 3" in page.text
     for path in ("/assets/app.js", "/assets/style.css"):
         assert client.get(path).status_code == 200
+
+
+def test_saved_manual_link_rejects_a_different_pdf_version(client, monkeypatch):
+    from services.api.app import main as api
+    monkeypatch.setattr(api, "fetch_manual_asset", lambda path: httpx.Response(
+        200, content=b"%PDF-test", headers={"X-Document-SHA256": "f" * 64}))
+    assert client.get("/manual.pdf?sha256=" + "f" * 64).status_code == 200
+    assert client.get("/manual.pdf?sha256=" + "a" * 64).status_code == 409

@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     rag_request_timeout_seconds: float = 180.0
     rag_max_attempts: int = 3
     rag_job_lease_seconds: float = 300.0
+    worker_heartbeat_seconds: float = 10.0
+    rag_retry_base_seconds: float = 2.0
+    rag_retry_max_seconds: float = 30.0
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

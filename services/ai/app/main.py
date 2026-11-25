@@ -108,4 +108,7 @@ def rag_query(payload: RagRequest) -> RagAnswer:
     try:
         return query_manual(payload.question, payload.case_id)
     except RagUnavailable as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
+        raise HTTPException(status_code=exc.status_code, detail=str(exc), headers={
+            "Retry-After": exc.retry_after,
+            "X-RAG-Retryable": "true" if exc.retryable else "false",
+        }) from exc

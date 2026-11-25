@@ -1,6 +1,7 @@
 services:
   db:
-    image: postgres:16-alpine
+    image: postgres:16-alpine@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+    restart: unless-stopped
     environment:
       POSTGRES_DB: maie6000c
       POSTGRES_USER: postgres
@@ -17,6 +18,7 @@ services:
 
   ai:
     build: .
+    restart: unless-stopped
     command: uvicorn services.ai.app.main:app --host 0.0.0.0 --port 8100
     env_file:
       - .env
@@ -32,6 +34,7 @@ services:
 
   api:
     build: .
+    restart: unless-stopped
     command: /bin/sh -c "alembic upgrade head && uvicorn services.api.app.main:app --host 0.0.0.0 --port 8000"
     env_file:
       - .env
@@ -53,6 +56,7 @@ services:
 
   worker:
     build: .
+    restart: unless-stopped
     command: python -m services.worker.app.main
     env_file:
       - .env

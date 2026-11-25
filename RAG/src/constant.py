@@ -1,5 +1,8 @@
 # 所有路径以 infer.py 为参考路径
-base_dir = "/root/autodl-tmp/RAG/"
+import os
+from pathlib import Path
+
+base_dir = str(Path(os.environ.get("RAG_DIR", Path(__file__).resolve().parents[1])).resolve()) + "/"
 
 # 数据路径
 pdf_path = base_dir + "data/Tesla_Manual.pdf"

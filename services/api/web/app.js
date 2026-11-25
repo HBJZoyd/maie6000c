@@ -1,12 +1,14 @@
 'use strict';
 const $ = (id) => document.getElementById(id);
 let records = [], activeId = null, ready = false, sending = false, pollTimer = null;
+let submission = null;
 const states = {queued: '排队中', processing: '正在查阅手册', answered: '回答完成', failed: '处理失败'};
 const pending = (record) => ['queued', 'processing'].includes(record.status);
 const dateLabel = (value) => new Intl.DateTimeFormat('zh-CN', {month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'}).format(new Date(value));
 
 async function request(path, options = {}) {
-  const response = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+  const response = await fetch(path, {...options,
+    headers:{'Content-Type':'application/json', ...(options.headers || {})}});
   if (!response.ok) {
     const body = await response.json().catch(() => ({}));
     throw new Error(typeof body.detail === 'string' ? body.detail : '请求未完成，请稍后重试。');
@@ -43,6 +45,10 @@ function renderHistory() {
 function renderRecord(record) {
   $('welcome').hidden = true; $('conversation').hidden = false;
   $('question-text').textContent = record.question; $('answer-state').textContent = states[record.status] || '';
+  if (record.status === 'answered') {
+    const labels = {needs_clarification:'需要补充信息', insufficient_evidence:'手册证据不足'};
+    $('answer-state').textContent = labels[record.answer_type] || states.answered;
+  }
   const content = $('answer-content'); content.replaceChildren(); content.className = 'answer-content';
   $('source-section').hidden = true; $('copy-answer').hidden = true; $('retry-question').hidden = true;
   $('answer-time').textContent = '';
@@ -57,11 +63,17 @@ function renderRecord(record) {
     $('retry-question').hidden = false; return;
   }
   content.textContent = record.answer || '手册中未找到可用答案。'; $('copy-answer').hidden = !record.answer;
-  $('answer-time').textContent = dateLabel(record.updated_at);
+  $('answer-time').textContent = dateLabel(record.updated_at) + (record.manual ?
+    ` · ${record.manual.manual_version}` : ' · 历史记录：手册版本未标注');
+  if (record.provenance?.mode === 'fixture') {
+    const warning = document.createElement('p'); warning.textContent = '离线工程测试：模拟结果，未调用真实 AI。';
+    content.prepend(warning);
+  }
   const pages = $('page-links'), excerpts = $('source-excerpts'), images = $('related-images');
   pages.replaceChildren(); excerpts.replaceChildren(); images.replaceChildren();
   for (const page of record.cite_pages || []) {
     const link = document.createElement('a'); link.className = 'page-link'; link.href = `/manual.pdf#page=${page}`;
+    if (record.manual) link.href = `/manual.pdf?sha256=${record.manual.document_sha256}#page=${page}`;
     link.target = '_blank'; link.rel = 'noopener'; link.textContent = `手册第 ${page} 页 ↗`; pages.append(link);
   }
   for (const source of record.sources || []) {
@@ -102,11 +114,15 @@ async function loadHistory() {
   catch { notice('历史提问暂时无法读取，请检查项目服务是否正常运行。'); }
 }
 async function checkConnection() {
-  try { const status = await request('/system/status'); ready = status.rag === 'ready'; }
+  try { const status = await request('/system/status'); ready = status.rag === 'ready'; window.backendMode = status.mode; }
   catch { ready = false; }
   $('connection').className = `connection ${ready ? 'ready' : 'unavailable'}`;
-  $('connection').querySelector('span').textContent = ready ? '车书服务已连接' : '车书服务未连接';
+  $('connection').querySelector('span').textContent = ready ?
+    (window.backendMode === 'fixture' ? '离线工程测试（模拟）' : '车书服务已连接') : '车书服务未连接';
   $('composer-note').textContent = ready ? '回答依据已收录的手册，功能可能随车型年份、配置及软件版本不同。' : '问答服务尚未连接。历史记录仍可查看，连接后即可开始提问。';
+  if (ready && window.backendMode === 'fixture') {
+    $('composer-note').textContent = '当前为离线工程测试：仅验证提交、异步处理和保存，不调用真实 AI。';
+  }
   updateSend();
 }
 $('question-input').addEventListener('input', updateSend);
@@ -119,7 +135,11 @@ $('question-form').addEventListener('submit', async event => {
   event.preventDefault(); if ($('send-button').disabled) return;
   sending = true; updateSend(); notice('');
   try {
-    const record = await request('/questions', {method:'POST',body:JSON.stringify({question:$('question-input').value.trim()})});
+    const question = $('question-input').value.trim();
+    if (!submission || submission.question !== question) submission = {question, key:crypto.randomUUID()};
+    const record = await request('/questions', {method:'POST',
+      headers:{'Idempotency-Key':submission.key},body:JSON.stringify({question})});
+    submission = null;
     $('question-input').value = ''; upsert(record); selectRecord(record);
   } catch (error) { notice(error.message); }
   finally { sending = false; updateSend(); }

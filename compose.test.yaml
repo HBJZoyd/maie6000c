@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine@sha256:721873c34ceb9f8d8fc265984940dc982404c105f19ad51be9fdc5970a6080ea
+    environment:
+      POSTGRES_DB: odie_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U postgres -d odie_test]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+  tests:
+    build: {context: ., target: tests}
+    environment:
+      TEST_POSTGRES_URL: postgresql+psycopg://postgres:postgres@db:5432/odie_test
+    depends_on:
+      db: {condition: service_healthy}
+    command: python -m pytest -q tests/unit tests/integration tests/postgres

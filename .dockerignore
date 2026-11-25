@@ -5,7 +5,10 @@ __pycache__
 .pytest_cache
 *.pyc
 .env
-RAG
+RAG/**
+!RAG/
+!RAG/src/
+!RAG/src/utils.py
 artifacts
 submissions
 templates

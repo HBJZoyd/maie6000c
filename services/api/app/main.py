@@ -5,7 +5,7 @@ from pathlib import Path
 from time import perf_counter
 
 import httpx
-from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request, Response
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from prometheus_client import (
@@ -15,11 +15,12 @@ from prometheus_client import (
     generate_latest,
 )
 from sqlalchemy import select, text
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from services.common.config import configure_logging, get_settings
 from services.common.db import get_db
-from services.common.models import Case, CaseStatus, Job, JobStatus, JobType
+from services.common.models import Case, CaseStatus, Job, JobAttempt, JobStatus, JobType
 from services.common.rag_client import RagUnavailable, fetch_manual_asset
 from services.common.schemas import (
     CaseCreate,
@@ -121,7 +122,10 @@ def health_live() -> HealthResponse:
 
 @app.get("/health/ready", response_model=HealthResponse)
 def health_ready(db: Session = Depends(get_db)) -> HealthResponse:
-    db.execute(text("SELECT 1"))
+    try:
+        db.execute(text("SELECT 1"))
+    except SQLAlchemyError as exc:
+        raise HTTPException(status_code=503, detail="Database unavailable") from exc
     return HealthResponse(service="api", status="ok")
 
 
@@ -188,6 +192,11 @@ def question_record(db: Session, case: Case) -> QuestionRead:
         cite_pages=case.cite_pages or [],
         sources=case.sources or [],
         related_images=case.related_images or [],
+        answer_type=(case.answer_payload or {}).get("answer_type"),
+        manual=(case.answer_payload or {}).get("manual"),
+        provenance=(case.answer_payload or {}).get("provenance"),
+        steps=(case.answer_payload or {}).get("steps", []),
+        next_run_at=job.next_run_at,
         error=job.error,
         job_id=job.id,
         attempts=job.attempts,
@@ -197,16 +206,34 @@ def question_record(db: Session, case: Case) -> QuestionRead:
 
 
 @app.post("/questions", response_model=QuestionRead, status_code=202)
-def create_question(payload: QuestionCreate, db: Session = Depends(get_db)) -> QuestionRead:
+def create_question(
+    payload: QuestionCreate, db: Session = Depends(get_db),
+    idempotency_key: str | None = Header(
+        default=None, min_length=1, max_length=128, pattern=r"^[A-Za-z0-9._:-]+$"
+    ),
+) -> QuestionRead:
+    def existing():
+        record = db.execute(select(Case).where(Case.idempotency_key == idempotency_key)).scalar()
+        if record and record.description != payload.question:
+            raise HTTPException(status_code=409, detail="Idempotency key already used")
+        return record
+
+    if idempotency_key and (record := existing()):
+        return question_record(db, record)
     case = Case(
-        title=payload.question[:200], description=payload.question, status=CaseStatus.QUEUED.value
+        title=payload.question[:200], description=payload.question, status=CaseStatus.QUEUED.value,
+        idempotency_key=idempotency_key,
     )
     db.add(case)
-    db.flush()
-    db.add(
-        Job(case_id=case.id, job_type=JobType.ANSWER_QUESTION.value, status=JobStatus.PENDING.value)
-    )
-    db.commit()
+    try:
+        db.flush()
+        db.add(Job(case_id=case.id, job_type=JobType.ANSWER_QUESTION.value, status="pending"))
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        if idempotency_key and (record := existing()):
+            return question_record(db, record)
+        raise
     db.refresh(case)
     return question_record(db, case)
 
@@ -240,22 +267,40 @@ def read_question(question_id: str, db: Session = Depends(get_db)) -> QuestionRe
 
 @app.post("/questions/{question_id}/retry", response_model=QuestionRead, status_code=202)
 def retry_question(question_id: str, db: Session = Depends(get_db)) -> QuestionRead:
-    case = db.execute(select(Case).where(Case.id == question_id).with_for_update()).scalar()
-    if case is None:
+    # Lock order is always Job then Case, matching worker completion/recovery.
+    job = db.execute(select(Job).where(
+        Job.case_id == question_id, Job.job_type == JobType.ANSWER_QUESTION.value,
+    ).with_for_update()).scalar_one_or_none()
+    case = db.get(Case, question_id) if job else None
+    if case is None or job is None:
         raise HTTPException(status_code=404, detail="Question not found")
     question_record(db, case)
     if case.status != CaseStatus.FAILED.value:
         raise HTTPException(status_code=409, detail="Only failed questions can be retried")
-    job = db.execute(select(Job).where(Job.case_id == case.id)).scalars().first()
     job.status = JobStatus.PENDING.value
     job.error = None
     job.claimed_at = None
     job.completed_at = None
     job.attempts = 0
+    job.claim_token, job.heartbeat_at, job.next_run_at = None, None, None
     case.status = CaseStatus.QUEUED.value
     db.commit()
     db.refresh(case)
     return question_record(db, case)
+
+
+@app.get("/questions/{question_id}/attempts")
+def question_attempts(question_id: str, db: Session = Depends(get_db)) -> list[dict]:
+    case = db.get(Case, question_id)
+    if case is None:
+        raise HTTPException(status_code=404, detail="Question not found")
+    question_record(db, case)
+    rows = db.execute(select(JobAttempt).join(Job).where(
+        Job.case_id == question_id,
+    ).order_by(JobAttempt.generation)).scalars().all()
+    return [{"attempt_id": a.id, "generation": a.generation, "status": a.status,
+             "started_at": a.started_at, "finished_at": a.finished_at,
+             "error_code": a.error_code, "error": a.error} for a in rows]
 
 
 @app.get("/system/status")
@@ -270,15 +315,19 @@ def system_status(db: Session = Depends(get_db)) -> dict:
         ready = backend.get("ready") is True
     except (httpx.HTTPError, ValueError):
         ready = False
-    return {"api": "ready", "database": "ready", "rag": "ready" if ready else "unavailable"}
+    return {"api": "ready", "database": "ready", "rag": "ready" if ready else "unavailable",
+            "mode": backend.get("mode", "unknown") if ready else "unknown"}
 
 
 @app.get("/manual.pdf", include_in_schema=False)
-def manual_pdf() -> Response:
+def manual_pdf(sha256: str | None = Query(default=None, pattern=r"^[a-f0-9]{64}$")) -> Response:
     try:
         asset = fetch_manual_asset("/rag/manual")
     except RagUnavailable as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+    if sha256 and asset.headers.get("X-Document-SHA256") != sha256:
+        raise HTTPException(status_code=409,
+                            detail="The saved answer uses a different manual version")
     return Response(
         asset.content,
         media_type="application/pdf",
