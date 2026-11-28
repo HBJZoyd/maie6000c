@@ -8,7 +8,7 @@ This maps the supplied rubric; it does not award a score.
 | Functional completeness | 20 | Real HTTP202 → SQL → worker → A100 Qwen3 → saved answer/references → restart |
 | Engineering quality | 20 | Preserved idempotency, fenced claims, heartbeat, bounded retry and migrations |
 | Architecture/decisions | 15 | Architecture flow, service boundaries, ADRs and target-only repair |
-| Testing/validation | 10 | 55 engineering/PostgreSQL tests; 1 additional GPU smoke; hash/rollback proof |
+| Testing/validation | 10 | 59 engineering/PostgreSQL tests; 4 isolated PowerShell startup contracts; real GPU smoke and clean-start evidence; hash/rollback proof |
 | Documentation/operations | 15 | Runbook, real evidence, logs, metrics, asset checks and shutdown |
 | Progression/discipline | 10 | W03/W04/W07 retained, ZHANG Yiming history and existing final checkpoint preserved |
 

@@ -7,6 +7,10 @@ Use authorized GPU assets, the genuine Mongo snapshot, rebuilt 6102-row index, c
 2. Start local Docker with `scripts/start.cmd -Mode Remote`.
 3. Check `/system/status`: API/database/RAG ready, mode live. Open `/app` and verify the connected indicator.
 
+## Clean checkout option
+
+For a new isolated demonstration, follow [the reproduction guide](../../docs/reproducibility.md) and run `scripts/verify-clean-start.ps1` from a released checkout. Use unused ports/project and a directory that does not exist. The script verifies zero initial questions, real inference, queued SQL, restart and idempotency; it fails rather than substitutes replay. The underlying GPU assets remain a prerequisite.
+
 ## Working-system sequence
 - Submit: **Model 3 如何开启哨兵模式？在家停车时可以自动关闭吗？**
 - Explain that HTTP 202 follows committed question/job records, not a browser-generated answer.
@@ -24,3 +28,5 @@ The collector creates a new real request and restarts only the named local stack
 If unavailable, show that state, retain attempts and restore dependencies before retrying. Never switch silently to a recording. Saved history is historical evidence, not a new model call. Citation validity is not factual correctness or vehicle safety.
 
 After engineering, remove temporary keys/forwarding and use platform power-off for A100/source, verifying stopped status. Keep data disks and database volumes. Do not set automatic timers or release instances.
+
+Latest publisher: HBJZoyd. Release branch `w13`; required tag `w13-final`. The earlier simulation and real checkpoints remain preserved separately.

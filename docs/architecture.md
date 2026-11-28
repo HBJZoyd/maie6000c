@@ -39,3 +39,7 @@ COUNT queries observed0 before repair,6102 after, and0 after executing rollback 
 ## Signals and boundaries
 
 Liveness is separate from readiness. Missing assets or a broken tunnel yield unavailable readiness, never a fabricated fallback. JSON events, attempts, API metrics, gateway completion logs and vLLM request/token counters expose separate stages. Historical simulation adapters remain explicitly labelled in separate projects; no automatic fallback is enabled. Legacy W07 data stay readable without invented provenance. Public multi-user authorization and a measured factual benchmark are outside this prototype.
+
+## Startup acceptance boundary
+
+The Remote launcher requires API/database/RAG ready and live mode after container health checks; configuration-only preflight is not runtime acceptance. A separate clean checkout/database verifier submits a fresh real question and checks queued SQL, restart and idempotency without reusing the development database. The GPU remains an explicitly provisioned private dependency. See ADR0007 and [reproduction](reproducibility.md).

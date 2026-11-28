@@ -1,0 +1,10 @@
+{
+  "slides": 8,
+  "sha256": "fc6dd64bbc7bf6bcb8c36855c9cdfbadb1758274aa0559d31f31074787d9f30a",
+  "bytes": 47750,
+  "package_integrity": "pass",
+  "layout_findings": 0,
+  "font_policy_passed": true,
+  "reimport_passed": true,
+  "native_powerpoint_verified": false
+}

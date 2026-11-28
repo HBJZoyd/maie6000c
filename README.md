@@ -11,6 +11,7 @@ On **28 November 2026**, local FastAPI, PostgreSQL, a separate worker and an Aut
 - Saved envelopes retain page links, excerpts/checksums and model/index/prompt identities.
 - Queued SQL, completed attempts, idempotency, metrics and restart survival were captured.
 - 59 unit/integration/PostgreSQL tests and one additional real-GPU smoke test passed.
+- The Remote launcher now fails closed unless API/database/RAG are ready in live mode; four isolated PowerShell startup contracts cover unavailable/fixture/live/configuration-only behavior.
 
 Start at [the final report and evidence index](submissions/week13/README.md).
 
@@ -24,7 +25,7 @@ ssh -N -L 127.0.0.1:6001:127.0.0.1:6001 -p SSH_PORT root@SSH_HOST
 scripts\start.cmd -Mode Remote
 ```
 
-Open `http://localhost:8000/app`. `/system/status` must report `rag=ready` and `mode=live`; otherwise new questions stay disabled. Existing history remains readable. The default gateway URL is `http://host.docker.internal:6001`. See [operations](docs/operations.md). This is a dated live validation, not a permanently hosted service. GPU power-off after delivery avoids ongoing charges; a later live demo requires restarting the authorized GPU and tunnel.
+Open `http://localhost:8000/app`. `/system/status` must report `rag=ready` and `mode=live`; otherwise new questions stay disabled. Existing history remains readable. The default gateway URL is `http://host.docker.internal:6001`. See [operations](docs/operations.md) and [clean-start reproduction](docs/reproducibility.md). This is a dated live validation, not a permanently hosted service. GPU power-off after delivery avoids ongoing charges; a later live demo requires restarting the authorized GPU and tunnel.
 
 ## Verify
 
@@ -39,3 +40,7 @@ The real launcher defaults to Remote mode. Historical fixture/replay modes remai
 ## Boundaries
 
 One Chinese manual, single-turn questions and local access. Citation validity is not factual accuracy or a vehicle-safety guarantee. Human semantic review, multi-manual selection, public authorization and broader load testing remain future work.
+
+## Release references
+
+Latest maintained branch: `w13`; required tag: `w13-final`; latest publisher: HBJZoyd. `w13-1` retains the old simulated final, `w13-2` the previous real final, and `w13-reliability` ZHANG Yiming's unchanged optimization. Prior authorship and materials remain intact.

@@ -1,0 +1,45 @@
+{
+  "started_at_utc": "2026-11-28T13:43:33.5254443Z",
+  "project": "odie-clean-20261128",
+  "repository": "local Git object source for pending release, cloned with --no-local",
+  "requested_revision": "6e885e9cc156789d23ebf1966b128a89d76859d1",
+  "source_commit": "6e885e9cc156789d23ebf1966b128a89d76859d1",
+  "initial_git_status": null,
+  "initial_env_exists": false,
+  "initial_question_count": 0,
+  "initial_status": {
+    "api": "ready",
+    "database": "ready",
+    "rag": "ready",
+    "mode": "live",
+    "demo_kind": null
+  },
+  "live_summary": {
+    "started_at_utc": "2026-11-28T13:49:22.753581+00:00",
+    "finished_at_utc": "2026-11-28T13:49:45.041137+00:00",
+    "mode": "live",
+    "real_ai_verified": true,
+    "demo_kind": null,
+    "inference_execution": "live_model",
+    "factual_accuracy_evaluated": false,
+    "question_id": "4f9fe954-2922-4b5e-9994-5cbf0d08bdfd",
+    "input_persisted_before_worker_verified": true,
+    "restart_verified": true,
+    "idempotency_verified": true,
+    "pdf_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716"
+  },
+  "final_status": {
+    "api": "ready",
+    "database": "ready",
+    "rag": "ready",
+    "mode": "live",
+    "demo_kind": null
+  },
+  "success": true,
+  "finished_at_utc": "2026-11-28T13:49:45.1120552Z",
+  "cleanup_requested": true,
+  "cleanup_exit": 0,
+  "operator": "same engineering operator; not independent second-person validation",
+  "gpu_dependency": "authorized pre-provisioned A100 assets; no weights/manual redistribution",
+  "docker_cache": "permitted; not claimed cache-free"
+}

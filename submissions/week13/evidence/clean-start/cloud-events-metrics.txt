@@ -1,0 +1,11 @@
+INFO:maie.rag:rag_completed case=4f9fe954-2922-4b5e-9994-5cbf0d08bdfd duration=5.39 mode=live
+Successfully connected to MongoDB
+MongoDB manual snapshot verified
+Loading vLLM; waiting for actual model readiness (up to 900s)
+LLM ready; initializing retrieval gateway
+Real RAG backend ready; keep this supervisor running
+vllm:prompt_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 2537.0
+vllm:generation_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 265.0
+vllm:request_success_total{engine="0",finished_reason="stop",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 1.0
+vllm:request_success_total{engine="0",finished_reason="length",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0
+vllm:request_success_total{engine="0",finished_reason="abort",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0

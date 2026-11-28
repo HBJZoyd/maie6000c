@@ -1,0 +1,7 @@
+{
+  "api": "ready",
+  "database": "ready",
+  "rag": "ready",
+  "mode": "live",
+  "demo_kind": null
+}

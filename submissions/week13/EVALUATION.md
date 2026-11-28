@@ -18,3 +18,22 @@ Use the exact hashed 255-page manual. Label expected pages before scoring. Inclu
 Retain question ID, answer type, excerpts/pages, attempts, model/index/prompt versions and stage timings. Two reviewers should independently judge relevance, support for every step, qualifications and appropriate clarification/abstention. Retain disagreements and report per-question outcomes before generalizing. Confidence numbers or checksum passes are not calibrated accuracy.
 
 Concurrency, heartbeat recovery, fencing, retry limits, migrations and corrupt evidence have deterministic coverage. Live smoke refuses non-live readiness. Broader load, controlled tunnel-loss recovery, public authorization and cross-manual evaluation remain future work. Synthetic answers are not factual or live-model evidence.
+
+## Clean-start acceptance — additional executed run
+
+Source: `6e885e9cc156789d23ebf1966b128a89d76859d1`; trace: `4f9fe954-2922-4b5e-9994-5cbf0d08bdfd`; 28 November 2026, 21:49 HKT.
+
+| Check | Observed result |
+|---|---|
+| Git clone without local hardlinks | New checkout from local pending-release Git source; exact commit recorded |
+| Initial checkout/config | Clean status; no `.env`; example-generated configuration |
+| Isolated PostgreSQL | Zero existing questions before submission |
+| Real readiness | API/database/RAG ready; mode live |
+| New live request | HTTP202; queued SQL before worker; real A100 answer; gateway 5.39 s |
+| Persistence/restart/idempotency | Passed; same saved answer and attempts after restart |
+| New model-process counter snapshot | 1 successful request; 2537 prompt / 265 generation tokens |
+| Verification cleanup | Compose down exit0; no `-v`; development stack untouched |
+| Startup regression contracts | 4 passed with explicit isolated Docker/HTTP test doubles |
+| Launcher rollback probe | unavailable falsely accepted exit0 → refused exit1 → original acceptance exit0; exact hash restored |
+
+See `evidence/clean-start/`. This adds a repeated Sentry trace, not a third distinct question or an accuracy benchmark. It validates the local application/database against an already provisioned GPU; it is not cold reconstruction of private assets, cache-free image building or independent second-person review.

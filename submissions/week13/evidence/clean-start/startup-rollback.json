@@ -1,0 +1,51 @@
+{
+  "scope": "Isolated launcher contract probe with explicit Docker/HTTP test doubles; not real inference",
+  "changed_branch": "scripts/start.ps1 Remote: fail closed unless API/database/RAG ready and mode=live",
+  "baseline": {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "ISOLATED_PROBE.ps1",
+      "-Launcher",
+      "BASELINE_COPY/scripts/start.ps1"
+    ],
+    "stdout": "test-double-engine\nRemote mode requires the real GPU backend and an active tunnel.\nApplication started. Check /system/status before submitting a real question.\nLAUNCHER_EXIT=0\n",
+    "stderr": "",
+    "exit": 0
+  },
+  "modified": {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "ISOLATED_PROBE.ps1",
+      "-Launcher",
+      "MODIFIED_COPY/scripts/start.ps1"
+    ],
+    "stdout": "test-double-engine\nRemote mode requires the real GPU backend and an active tunnel.\nLAUNCHER_EXIT=1\n",
+    "stderr": "Containers started, but real AI readiness failed. Restore the GPU backend and SSH tunnel, then rerun. No fixture/replay fallback was enabled; database volumes are preserved.\n",
+    "exit": 1
+  },
+  "rollback": {
+    "command": [
+      "powershell",
+      "-NoProfile",
+      "-File",
+      "ISOLATED_PROBE.ps1",
+      "-Launcher",
+      "ROLLBACK_COPY/scripts/start.ps1"
+    ],
+    "stdout": "test-double-engine\nRemote mode requires the real GPU backend and an active tunnel.\nApplication started. Check /system/status before submitting a real question.\nLAUNCHER_EXIT=0\n",
+    "stderr": "",
+    "exit": 0
+  },
+  "hashes": {
+    "BASELINE.ps1": "924b95de5ae1fc86574369d9248462def9fce773e9981a0b6910b723bea0d91e",
+    "MODIFIED_FILE.ps1": "a832b8cd4baa1436f1d7a95709a4a87d6aa7e917b4fe1e6c536f499dfc812147",
+    "DIFF_FILE.json": "0134bd0103ab9727a718f0cc8e33278943a29f3b5c9e535d28353d8032903d82",
+    "ROLLBACK.sh": "0621f368f296d6501397774298baf8e0a366841d02bef310ca7ddf943d2c03f1"
+  },
+  "rollback_sha_equal_baseline": true,
+  "patch_reconstructs_modified": true
+}

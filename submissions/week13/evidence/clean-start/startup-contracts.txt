@@ -1,0 +1,9 @@
+PASS: state=unavailable configuration_only=False exit=1
+PASS: state=fixture configuration_only=False exit=1
+PASS: state=live configuration_only=False exit=0
+PASS: state=unavailable configuration_only=True exit=0
+4 isolated startup contracts passed. No GPU inference was performed by these tests.
+
+STDERR:
+
+EXIT=0

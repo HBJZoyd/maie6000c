@@ -17,5 +17,13 @@
   "javascript_syntax": "passed",
   "powershell_parse": "passed",
   "simulated_demo_preserved": true,
-  "git_history_rewrite_performed": false
+  "git_history_rewrite_performed": false,
+  "clean_local_startup_verified": true,
+  "clean_start_source_commit": "6e885e9cc156789d23ebf1966b128a89d76859d1",
+  "clean_start_initial_questions": 0,
+  "clean_start_question_id": "4f9fe954-2922-4b5e-9994-5cbf0d08bdfd",
+  "powershell_startup_contracts_passed": 4,
+  "latest_publisher": "HBJZoyd",
+  "release_branch": "w13",
+  "required_tag": "w13-final"
 }
