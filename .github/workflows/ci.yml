@@ -53,3 +53,7 @@ jobs:
 
       - name: Unit and integration tests
         run: pytest -q tests/unit tests/integration tests/postgres
+
+      - name: PowerShell startup contracts (explicit test doubles)
+        shell: pwsh
+        run: ./tests/startup/test-startup.ps1

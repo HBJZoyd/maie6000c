@@ -26,7 +26,16 @@ try {
     } else {
         $composeFile = 'compose.yaml'
         if ($ProjectName -eq 'odie-offline') { $ProjectName = 'maie6000c' }
-        # Real mode preserves the host ports in the user's existing configuration.
+        # Explicit parameters override configuration; otherwise preserve the user's port.
+        if ($PSBoundParameters.ContainsKey('ApiPort')) {
+            $env:API_HOST_PORT = [string]$ApiPort
+        } elseif ($env:API_HOST_PORT) {
+            $ApiPort = [int]$env:API_HOST_PORT
+        } else {
+            $portLine = Get-Content -LiteralPath '.env' | Where-Object { $_ -match '^API_HOST_PORT=([0-9]+)$' } | Select-Object -Last 1
+            if ($portLine) { $ApiPort = [int]($portLine -split '=',2)[1] }
+        }
+        if ($ApiPort -lt 1 -or $ApiPort -gt 65535) { throw 'Invalid API_HOST_PORT.' }
         Write-Host 'Remote mode requires the real GPU backend and an active tunnel.'
     }
     & docker --context default compose -p $ProjectName -f $composeFile config --quiet
@@ -51,6 +60,10 @@ try {
             Write-Host 'Answers are synthetic. This does not validate real AI or vehicle instructions.'
         }
     } else {
-        Write-Host 'Application started. Check /system/status before submitting a real question.'
+        $status = Invoke-RestMethod -Uri "http://127.0.0.1:$ApiPort/system/status" -TimeoutSec 15
+        if ($status.api -ne 'ready' -or $status.database -ne 'ready' -or $status.rag -ne 'ready' -or $status.mode -ne 'live') {
+            throw 'Containers started, but real AI readiness failed. Restore the GPU backend and SSH tunnel, then rerun. No fixture/replay fallback was enabled; database volumes are preserved.'
+        }
+        Write-Host "REAL MODEL READY: http://localhost:$ApiPort/app"
     }
 } finally { Pop-Location }
