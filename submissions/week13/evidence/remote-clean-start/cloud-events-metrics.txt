@@ -1,0 +1,6 @@
+INFO:maie.rag:rag_completed case=9d80b78f-b158-40b4-9671-92e12538957e duration=3.34 mode=live
+vllm:prompt_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 5074.0
+vllm:generation_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 624.0
+vllm:request_success_total{engine="0",finished_reason="stop",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 2.0
+vllm:request_success_total{engine="0",finished_reason="length",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0
+vllm:request_success_total{engine="0",finished_reason="abort",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0

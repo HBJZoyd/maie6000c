@@ -45,3 +45,9 @@ The Remote launcher now checks API/database/RAG ready and live mode and fails cl
 The clean-start script records exact source and initial state and refuses an existing checkout, occupied ports, reused project or nonempty question history. The connection helper supports existing identity/known-host files, managed services and tunnel-only reconnection. The operations guide defines prerequisites, asset entitlement/hash checks, safe host verification, startup deadlines, diagnosis, rollback boundaries and non-destructive cleanup. Publisher for these improvements is HBJZoyd; previous authorship is unchanged.
 
 Reproduction is conditional on an authorized pre-provisioned GPU environment. The pending-release source was local Git, not a remote clone; Docker caches are permitted and no independent second-operator claim is made. Factual correctness and load capacity remain outside these checks.
+
+## Released-repository reproduction
+
+After HBJZoyd published the improvements, the public GitHub repository was cloned at `feb29e5d833345f283c35195a70e7f57f33e65d6` into a second new directory. No old configuration or local database was copied. A new project/database and ports 18001/18101/15433 started with zero questions. At 21:57–21:58 HKT, trace `9d80b78f-b158-40b4-9671-92e12538957e` completed the same real acceptance sequence and restart retention, gateway 3.34 s, collector exit0, non-destructive cleanup exit0.
+
+A real idle-forward interruption also changed RAG readiness to unavailable and then back to ready/live without disturbing API/database readiness. This is a dependency-readiness drill, not an in-flight worker fault experiment. Both clean deployments used the same operator and an authorized existing GPU environment. Private-asset availability remains explicit. The final evidence/material update does not change the tested application/runtime code.

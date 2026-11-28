@@ -17,7 +17,7 @@ Use the exact hashed 255-page manual. Label expected pages before scoring. Inclu
 
 Retain question ID, answer type, excerpts/pages, attempts, model/index/prompt versions and stage timings. Two reviewers should independently judge relevance, support for every step, qualifications and appropriate clarification/abstention. Retain disagreements and report per-question outcomes before generalizing. Confidence numbers or checksum passes are not calibrated accuracy.
 
-Concurrency, heartbeat recovery, fencing, retry limits, migrations and corrupt evidence have deterministic coverage. Live smoke refuses non-live readiness. Broader load, controlled tunnel-loss recovery, public authorization and cross-manual evaluation remain future work. Synthetic answers are not factual or live-model evidence.
+Concurrency, heartbeat recovery, fencing, retry limits, migrations and corrupt evidence have deterministic coverage. Live smoke refuses non-live readiness. Broader load, controlled in-flight tunnel-loss recovery, public authorization and cross-manual evaluation remain future work. Synthetic answers are not factual or live-model evidence.
 
 ## Clean-start acceptance — additional executed run
 
@@ -37,3 +37,11 @@ Source: `6e885e9cc156789d23ebf1966b128a89d76859d1`; trace: `4f9fe954-2922-4b5e-9
 | Launcher rollback probe | unavailable falsely accepted exit0 → refused exit1 → original acceptance exit0; exact hash restored |
 
 See `evidence/clean-start/`. This adds a repeated Sentry trace, not a third distinct question or an accuracy benchmark. It validates the local application/database against an already provisioned GPU; it is not cold reconstruction of private assets, cache-free image building or independent second-person review.
+
+## Published GitHub clone and idle-tunnel drill — additional verification
+
+The public repository was freshly cloned at `feb29e5d833345f283c35195a70e7f57f33e65d6` into another absent directory; `.env` was absent, Git status clean, and the new isolated PostgreSQL database initially contained zero questions. At 21:57–21:58 HKT, new request `9d80b78f-b158-40b4-9671-92e12538957e` passed queued SQL, actual A100 generation, citations, saved state, idempotency and restart. Gateway duration was 3.34 s. The collector and no-volume-deletion cleanup both exited0. See `evidence/remote-clean-start/`.
+
+The restarted model's counter snapshot now shows 2 successful requests, 5074 prompt tokens and 624 generated tokens. This cumulative snapshot includes the earlier clean-start request; do not add it to that process's first snapshot as if they were independent totals. Distinct question count remains two overall.
+
+Separately, stopping/restoring the local SSH forward produced actual readiness transitions ready/live → unavailable/unknown → ready/live while API/database remained ready. No in-flight job was interrupted; retry-under-interruption, factual quality and capacity are not established by this drill. Source runtime hashes are checked unchanged across the final evidence-only commit.

@@ -41,6 +41,10 @@ The real launcher defaults to Remote mode. Historical fixture/replay modes remai
 
 One Chinese manual, single-turn questions and local access. Citation validity is not factual accuracy or a vehicle-safety guarantee. Human semantic review, multi-manual selection, public authorization and broader load testing remain future work.
 
+## Clean checkout validation
+
+A new clone of the published GitHub source and a new empty PostgreSQL database completed actual A100 inference, queued persistence, worker processing, citations, idempotency and restart. The [executed remote-clone proof](submissions/week13/evidence/remote-clean-start/reproduction.json) records the exact tested source. This is conditional on authorized private GPU assets, not a weight-free offline inference claim.
+
 ## Release references
 
 Latest maintained branch: `w13`; required tag: `w13-final`; latest publisher: HBJZoyd. `w13-1` retains the old simulated final, `w13-2` the previous real final, and `w13-reliability` ZHANG Yiming's unchanged optimization. Prior authorship and materials remain intact.

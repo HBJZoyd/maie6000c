@@ -1,0 +1,210 @@
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+python_gc_objects_collected_total{generation="0"} 1277.0
+python_gc_objects_collected_total{generation="1"} 25.0
+python_gc_objects_collected_total{generation="2"} 0.0
+# HELP python_gc_objects_uncollectable_total Uncollectable objects found during GC
+# TYPE python_gc_objects_uncollectable_total counter
+python_gc_objects_uncollectable_total{generation="0"} 0.0
+python_gc_objects_uncollectable_total{generation="1"} 0.0
+python_gc_objects_uncollectable_total{generation="2"} 0.0
+# HELP python_gc_collections_total Number of times this generation was collected
+# TYPE python_gc_collections_total counter
+python_gc_collections_total{generation="0"} 241.0
+python_gc_collections_total{generation="1"} 21.0
+python_gc_collections_total{generation="2"} 1.0
+# HELP python_info Python platform information
+# TYPE python_info gauge
+python_info{implementation="CPython",major="3",minor="11",patchlevel="17",version="3.11.17"} 1.0
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 3.84974848e+08
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.16568064e+08
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.79587425503e+09
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 0.86
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 16.0
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1.048576e+06
+# HELP api_http_requests_total Total API HTTP requests
+# TYPE api_http_requests_total counter
+api_http_requests_total{method="GET",path="/health/live",status="200"} 3.0
+api_http_requests_total{method="GET",path="/system/status",status="200"} 3.0
+api_http_requests_total{method="GET",path="/questions",status="200"} 1.0
+api_http_requests_total{method="GET",path="/health/ready",status="200"} 1.0
+api_http_requests_total{method="POST",path="/questions",status="202"} 2.0
+api_http_requests_total{method="GET",path="/questions/{question_id}",status="200"} 10.0
+api_http_requests_total{method="GET",path="/questions/{question_id}/attempts",status="200"} 1.0
+api_http_requests_total{method="GET",path="/manual.pdf",status="200"} 1.0
+# HELP api_http_requests_created Total API HTTP requests
+# TYPE api_http_requests_created gauge
+api_http_requests_created{method="GET",path="/health/live",status="200"} 1.7958742648551083e+09
+api_http_requests_created{method="GET",path="/system/status",status="200"} 1.7958742666581738e+09
+api_http_requests_created{method="GET",path="/questions",status="200"} 1.795874266713228e+09
+api_http_requests_created{method="GET",path="/health/ready",status="200"} 1.7958742681877568e+09
+api_http_requests_created{method="POST",path="/questions",status="202"} 1.7958742715139847e+09
+api_http_requests_created{method="GET",path="/questions/{question_id}",status="200"} 1.7958742734476624e+09
+api_http_requests_created{method="GET",path="/questions/{question_id}/attempts",status="200"} 1.795874278769334e+09
+api_http_requests_created{method="GET",path="/manual.pdf",status="200"} 1.7958742915122712e+09
+# HELP api_http_request_duration_seconds API request duration in seconds
+# TYPE api_http_request_duration_seconds histogram
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_count{method="GET",path="/health/live"} 3.0
+api_http_request_duration_seconds_sum{method="GET",path="/health/live"} 0.001792028997442685
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/system/status"} 0.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/system/status"} 2.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_count{method="GET",path="/system/status"} 3.0
+api_http_request_duration_seconds_sum{method="GET",path="/system/status"} 2.097740019009507
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/questions"} 0.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_count{method="GET",path="/questions"} 1.0
+api_http_request_duration_seconds_sum{method="GET",path="/questions"} 0.008954901997640263
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_count{method="GET",path="/health/ready"} 1.0
+api_http_request_duration_seconds_sum{method="GET",path="/health/ready"} 0.0014786249957978725
+api_http_request_duration_seconds_bucket{le="0.005",method="POST",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.01",method="POST",path="/questions"} 1.0
+api_http_request_duration_seconds_bucket{le="0.025",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.05",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.075",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.1",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.25",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.5",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="0.75",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="1.0",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="2.5",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="5.0",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="7.5",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="10.0",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_count{method="POST",path="/questions"} 2.0
+api_http_request_duration_seconds_sum{method="POST",path="/questions"} 0.013318145996890962
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_count{method="GET",path="/questions/{question_id}"} 10.0
+api_http_request_duration_seconds_sum{method="GET",path="/questions/{question_id}"} 0.027962672007561196
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_count{method="GET",path="/questions/{question_id}/attempts"} 1.0
+api_http_request_duration_seconds_sum{method="GET",path="/questions/{question_id}/attempts"} 0.004805734999536071
+api_http_request_duration_seconds_bucket{le="0.005",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.01",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.025",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.05",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.075",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.1",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.25",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.5",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="0.75",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="1.0",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="2.5",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="5.0",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="7.5",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="10.0",method="GET",path="/manual.pdf"} 0.0
+api_http_request_duration_seconds_bucket{le="+Inf",method="GET",path="/manual.pdf"} 1.0
+api_http_request_duration_seconds_count{method="GET",path="/manual.pdf"} 1.0
+api_http_request_duration_seconds_sum{method="GET",path="/manual.pdf"} 12.719239938996907
+# HELP api_http_request_duration_seconds_created API request duration in seconds
+# TYPE api_http_request_duration_seconds_created gauge
+api_http_request_duration_seconds_created{method="GET",path="/health/live"} 1.7958742648551214e+09
+api_http_request_duration_seconds_created{method="GET",path="/system/status"} 1.795874266658192e+09
+api_http_request_duration_seconds_created{method="GET",path="/questions"} 1.7958742667132428e+09
+api_http_request_duration_seconds_created{method="GET",path="/health/ready"} 1.795874268187771e+09
+api_http_request_duration_seconds_created{method="POST",path="/questions"} 1.795874271513998e+09
+api_http_request_duration_seconds_created{method="GET",path="/questions/{question_id}"} 1.7958742734476826e+09
+api_http_request_duration_seconds_created{method="GET",path="/questions/{question_id}/attempts"} 1.795874278769397e+09
+api_http_request_duration_seconds_created{method="GET",path="/manual.pdf"} 1.7958742915122857e+09
+# HELP api_cases_created_total Total cases created
+# TYPE api_cases_created_total counter
+api_cases_created_total 0.0
+# HELP api_cases_created_created Total cases created
+# TYPE api_cases_created_created gauge
+api_cases_created_created 1.7958742558434758e+09

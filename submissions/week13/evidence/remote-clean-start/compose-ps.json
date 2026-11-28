@@ -1,0 +1,26 @@
+[
+  {
+    "Name": "odie-remote-clean-20261128-ai-1",
+    "Service": "ai",
+    "State": "running",
+    "Health": "healthy"
+  },
+  {
+    "Name": "odie-remote-clean-20261128-api-1",
+    "Service": "api",
+    "State": "running",
+    "Health": "healthy"
+  },
+  {
+    "Name": "odie-remote-clean-20261128-db-1",
+    "Service": "db",
+    "State": "running",
+    "Health": "healthy"
+  },
+  {
+    "Name": "odie-remote-clean-20261128-worker-1",
+    "Service": "worker",
+    "State": "running",
+    "Health": ""
+  }
+]

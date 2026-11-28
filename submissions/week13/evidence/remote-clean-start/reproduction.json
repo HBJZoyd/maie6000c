@@ -1,0 +1,46 @@
+{
+  "started_at_utc": "2026-11-28T13:57:14.5873769Z",
+  "project": "odie-remote-clean-20261128",
+  "repository": "https://github.com/HBJZoyd/maie6000c.git",
+  "requested_revision": "feb29e5d833345f283c35195a70e7f57f33e65d6",
+  "source_commit": "feb29e5d833345f283c35195a70e7f57f33e65d6",
+  "initial_git_status": null,
+  "initial_env_exists": false,
+  "initial_question_count": 0,
+  "initial_status": {
+    "api": "ready",
+    "database": "ready",
+    "rag": "ready",
+    "mode": "live",
+    "demo_kind": null
+  },
+  "live_summary": {
+    "started_at_utc": "2026-11-28T13:57:47.398335+00:00",
+    "finished_at_utc": "2026-11-28T13:58:17.772408+00:00",
+    "mode": "live",
+    "real_ai_verified": true,
+    "demo_kind": null,
+    "inference_execution": "live_model",
+    "factual_accuracy_evaluated": false,
+    "question_id": "9d80b78f-b158-40b4-9671-92e12538957e",
+    "input_persisted_before_worker_verified": true,
+    "restart_verified": true,
+    "idempotency_verified": true,
+    "pdf_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716"
+  },
+  "final_status": {
+    "api": "ready",
+    "database": "ready",
+    "rag": "ready",
+    "mode": "live",
+    "demo_kind": null
+  },
+  "success": true,
+  "finished_at_utc": "2026-11-28T13:58:17.8379148Z",
+  "cleanup_requested": true,
+  "cleanup_exit": 0,
+  "initial_git_status_clean": true,
+  "operator": "same engineering operator; not independent second-person validation",
+  "gpu_dependency": "authorized existing A100 assets/environment; not redistributed",
+  "docker_cache": "permitted, not claimed cache-free"
+}

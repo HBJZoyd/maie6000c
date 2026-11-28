@@ -41,5 +41,6 @@
   "cleanup_exit": 0,
   "operator": "same engineering operator; not independent second-person validation",
   "gpu_dependency": "authorized pre-provisioned A100 assets; no weights/manual redistribution",
-  "docker_cache": "permitted; not claimed cache-free"
+  "docker_cache": "permitted; not claimed cache-free",
+  "initial_git_status_clean": true
 }

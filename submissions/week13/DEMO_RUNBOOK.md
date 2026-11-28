@@ -30,3 +30,5 @@ If unavailable, show that state, retain attempts and restore dependencies before
 After engineering, remove temporary keys/forwarding and use platform power-off for A100/source, verifying stopped status. Keep data disks and database volumes. Do not set automatic timers or release instances.
 
 Latest publisher: HBJZoyd. Release branch `w13`; required tag `w13-final`. The earlier simulation and real checkpoints remain preserved separately.
+
+Executed public-clone rehearsal: source `feb29e5d833345f283c35195a70e7f57f33e65d6`, trace `9d80b78f-b158-40b4-9671-92e12538957e`, initial questions0, ready/live, actual model answer, restart/idempotency and cleanup passed. The idle tunnel-loss drill is in `evidence/remote-clean-start/tunnel-recovery.json`; it does not prove in-flight fault recovery.

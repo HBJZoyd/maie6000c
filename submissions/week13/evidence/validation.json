@@ -25,5 +25,11 @@
   "powershell_startup_contracts_passed": 4,
   "latest_publisher": "HBJZoyd",
   "release_branch": "w13",
-  "required_tag": "w13-final"
+  "required_tag": "w13-final",
+  "remote_github_clone_verified": true,
+  "remote_clone_source_commit": "feb29e5d833345f283c35195a70e7f57f33e65d6",
+  "remote_clone_initial_questions": 0,
+  "remote_clone_question_id": "9d80b78f-b158-40b4-9671-92e12538957e",
+  "idle_tunnel_readiness_recovery_verified": true,
+  "independent_second_person_review": false
 }

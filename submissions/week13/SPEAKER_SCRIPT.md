@@ -61,6 +61,8 @@ We restarted the existing authorized A100 and verified its release assets. Then 
 
 Sources: docs/reproducibility.md; evidence/clean-start/reproduction.json; evidence/clean-start/summary.json; scripts/verify-clean-start.ps1
 
+Published GitHub clone update: source feb29e5d833345f283c35195a70e7f57f33e65d6, fresh empty database and new trace 9d80b78f-b158-40b4-9671-92e12538957e passed the same real inference, queued SQL, idempotency and restart checks at 21:57–21:58 HKT. Collector and non-destructive cleanup exited0. A separate idle SSH-forward drill changed readiness to unavailable and restored live readiness; it did not interrupt an in-flight job. See evidence/remote-clean-start/. Both clean runs used the same operator and pre-provisioned authorized GPU assets.
+
 ## Slide 8: Delivery and remaining limits
 
 The latest improvements are published by HBJZoyd on branch w13 with required tag w13-final. Earlier simulated final d85b720 is preserved as w13-1, previous real result 6fbec03 as w13-2, and ZHANG Yiming's unchanged reliability commit b6c5ef3 as w13-reliability. No prior commits or simulated materials are deleted. Startup and operations documentation now describe asset entitlement, verified SSH, actual readiness, failure handling, safe cleanup and the clean-clone procedure. One Chinese manual, local access, no completed human-labelled accuracy benchmark and no controlled capacity study remain honest limits. A new live demonstration requires starting the GPU and authenticated forwarding; do not substitute a recording. The Canvas handoff must use the verified full peeled tag SHA, and the team performs the official Canvas submission.

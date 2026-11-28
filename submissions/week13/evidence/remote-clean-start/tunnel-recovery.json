@@ -1,0 +1,55 @@
+{
+  "scope": "Real readiness response to local SSH-forward loss/restoration; no in-flight job interrupted and no model accuracy claim",
+  "events": [
+    {
+      "stage": "connected",
+      "at_utc": "2026-11-28T13:59:01.491560+00:00",
+      "http": 200,
+      "status": {
+        "api": "ready",
+        "database": "ready",
+        "rag": "ready",
+        "mode": "live",
+        "demo_kind": null
+      }
+    },
+    {
+      "stage": "forward-stopped",
+      "at_utc": "2026-11-28T13:59:02.517026+00:00",
+      "http": 200,
+      "status": {
+        "api": "ready",
+        "database": "ready",
+        "rag": "unavailable",
+        "mode": "unknown",
+        "demo_kind": null
+      }
+    },
+    {
+      "stage": "forward-restored",
+      "at_utc": "2026-11-28T13:59:02.538892+00:00",
+      "http": 200,
+      "status": {
+        "api": "ready",
+        "database": "ready",
+        "rag": "unavailable",
+        "mode": "unknown",
+        "demo_kind": null
+      }
+    },
+    {
+      "stage": "forward-restored",
+      "at_utc": "2026-11-28T13:59:03.615004+00:00",
+      "http": 200,
+      "status": {
+        "api": "ready",
+        "database": "ready",
+        "rag": "ready",
+        "mode": "live",
+        "demo_kind": null
+      }
+    }
+  ],
+  "database_preserved": true,
+  "ready_to_unavailable_to_live_ready": true
+}
