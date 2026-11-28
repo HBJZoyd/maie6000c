@@ -1,108 +1,41 @@
-# Model 3 Manual Assistant
+# Model 3 Manual Assistant — Team Odie
 
-## Final milestone
+MAIE6000C is the course; the product is a vehicle-manual Q&A application. W03/W04/W07 milestones and ZHANG Yiming's reliability upgrade are preserved.
 
-Start the final review at [submissions/week13/README.md](submissions/week13/README.md).
-It indexes the technical brief, demo runbook, presentation and verification evidence.
-Run `scripts\start.cmd -Mode Demo` for the recorded Sentry Mode presentation at
-http://localhost:8030/app. The API, PostgreSQL and worker execute normally while
-the inference boundary replays a dated answer. The AutoDL deployment remains the
-real-model path. See the report for the scope of each evidence set.
+## Verified final delivery
 
-Team **Odie**, course **MAIE6000C: Engineering AI Products — From Prototype to Production**.
-MAIE6000C is the course name. This independent student prototype does not control
-a vehicle or claim affiliation with Tesla.
+On **28 November 2026**, local FastAPI, PostgreSQL, a separate worker and an AutoDL **A100 40GB** completed real Qwen3-backed questions. This is not a response replay or synthetic demonstration.
 
-The browser submits a question to FastAPI. One PostgreSQL transaction saves the
-question and pending job before HTTP 202. A worker claims the job, invokes the RAG
-boundary and saves the answer, steps, evidence excerpts and terminal state.
-History survives application restart.
+- HTTP202 follows committed question/job records.
+- BM25 and Milvus dense/sparse retrieval, existing reranking and Qwen3 generation produce cited answers.
+- Saved envelopes retain page links, excerpts/checksums and model/index/prompt identities.
+- Queued SQL, completed attempts, idempotency, metrics and restart survival were captured.
+- 59 unit/integration/PostgreSQL tests and one additional real-GPU smoke test passed.
 
-## Start without AutoDL — Windows CMD
+Start at [the final report and evidence index](submissions/week13/README.md).
 
-Requirements: Docker Desktop's Linux engine, Docker Compose 2.24.4+ and PowerShell.
-Initial builds download images/packages. No GPU, SSH or AutoDL is needed to use
-the explicitly synthetic engineering environment:
+## Run the real application
 
-~~~cmd
-cd /d "E:\Users\PC\Desktop\maie6000c"
-scripts\start.cmd
-~~~
+Prerequisites: Docker Desktop, authorized GPU assets/environment, MongoDB, a ready RAG gateway and an authenticated SSH tunnel. Weights and the complete manual are deliberately excluded from Git.
 
-Open **http://localhost:8020/app**. Its banner and results identify offline fixture
-mode: **no real AI is called and no factual vehicle instructions are provided**.
-The default project is odie-offline, with separate PostgreSQL and result-cache
-volumes. Existing .env, W07 data and historical tags are preserved.
-
-~~~cmd
-docker --context default compose -p odie-offline -f compose.offline.yaml stop
-~~~
-
-Run the start command again to resume with saved history. Deleting volumes is not
-a normal stop operation.
-
-## Real AI deployment
-
-The real backend uses the provisioned Chinese manual, BM25 + Milvus Lite hybrid
-retrieval, BGE reranking and a local vLLM Qwen3 model on AutoDL. Its private model,
-manual, index and MongoDB assets are not in Git. The reference environment is an
-A100 40 GB and a separate Python 3.12 GPU environment; local containers use 3.11.
-
-The new gateway requires an asset manifest and contract-v2 modules. Follow
-[the current deployment runbook](docs/reliability-upgrade.md) to inventory/export
-assets, verify them, start supervised dependencies and establish the SSH tunnel.
-After the real backend is ready:
-
-~~~cmd
+```powershell
+ssh -N -L 127.0.0.1:6001:127.0.0.1:6001 -p SSH_PORT root@SSH_HOST
+# In another terminal, from the checkout:
 scripts\start.cmd -Mode Remote
-~~~
+```
 
-This starts the existing maie6000c project using configured ports (normally
-http://localhost:8000/app). Do not run an old CLI and gateway together on one GPU.
-Real GPU startup, JSON generation quality and fresh-GPU reproduction remain
-pending verification while AutoDL is unavailable. Fixture checks do not establish
-real-AI readiness. No automatic fixture fallback is used for failed real requests.
+Open `http://localhost:8000/app`. `/system/status` must report `rag=ready` and `mode=live`; otherwise new questions stay disabled. Existing history remains readable. The default gateway URL is `http://host.docker.internal:6001`. See [operations](docs/operations.md). This is a dated live validation, not a permanently hosted service. GPU power-off after delivery avoids ongoing charges; a later live demo requires restarting the authorized GPU and tunnel.
 
-## Verification
+## Verify
 
-Run the isolated unit, integration and real PostgreSQL suite:
-
-~~~cmd
+```powershell
 docker --context default compose -p odie-verification -f compose.test.yaml up --build --abort-on-container-exit --exit-code-from tests
 docker --context default compose -p odie-verification -f compose.test.yaml down
-~~~
+python scripts/collect_final_evidence.py --mode live --base-url http://127.0.0.1:8000 --project maie6000c --compose-file compose.yaml --pause-worker --restart --timeout 900
+```
 
-With the offline application running, a standard-library Python 3.11+ interpreter
-can verify HTTP, SQL persistence, PDF identity and restart recovery:
+The real launcher defaults to Remote mode. Historical fixture/replay modes remain explicitly labelled in separate odie-offline and odie-demo projects; they never silently replace the real model. See [the preserved simulation archive](submissions/week13/history/simulated-final/README.md). Normal shutdown never uses `down -v`.
 
-~~~cmd
-python scripts\verify_offline.py --restart
-~~~
+## Boundaries
 
-The report identifies synthetic mode and real_ai_verified=false.
-Unit tests use labelled fixtures and SQLite; PostgreSQL-specific tests use only
-TEST_POSTGRES_URL with temporary schemas. They skip explicitly if it is absent.
-CI and compose.test.yaml enable these tests. Real-model smoke tests remain opt-in.
-
-## Documentation
-
-- [Architecture](docs/architecture.md) and [decision records](docs/adrs/)
-- [Operations](docs/operations.md)
-- [Upgrade, startup and evidence-contract details](docs/reliability-upgrade.md)
-- [Historical W07 report and real-AI evidence](submissions/week07/README.md)
-- [Pre-existing RAG source and asset provenance](RAG/PROVENANCE.md)
-
-## Source and supported scope
-
-services/api serves HTTP/UI, services/worker executes jobs, services/ai
-preserves the AI service boundary, and services/common contains persistence,
-schemas and configuration. scripts/rag_gateway.py is the remote adapter, with
-shared pure-Python evidence, asset and result-store helpers. Alembic migrations
-extend existing data without resetting it. RAG source predates the integration;
-local source changes are distinct from unchanged W07 remote snapshots.
-
-Supported scope is single-user, single-manual, single-turn questions with history,
-bounded retries and auditable evidence. Saved history is not multi-turn dialogue.
-There is no measured factual-accuracy score, multi-vehicle version selection,
-public-user authentication or automated safety decision-making. The legacy
-/cases and /triage keyword example remains separate from manual RAG.
+One Chinese manual, single-turn questions and local access. Citation validity is not factual accuracy or a vehicle-safety guarantee. Human semantic review, multi-manual selection, public authorization and broader load testing remain future work.

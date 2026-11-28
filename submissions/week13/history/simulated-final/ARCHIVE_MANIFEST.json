@@ -1,0 +1,54 @@
+{
+  "source_commit": "d85b72023dcbf2fbb2887dc077b012d7bf2aaae3",
+  "mode": "historical recorded/synthetic demonstration; not new model inference",
+  "files": {
+    "ORIGINAL_README.md": {
+      "bytes": 7081,
+      "sha256": "8e37d6307f7e44ae2ef8dba49fa9cb3eb5dfeb52e2761623e466642c385f9197"
+    },
+    "final-technical-brief.md": {
+      "bytes": 6418,
+      "sha256": "6fc348bff4d3ff51b5ba925cca53dbed177660a4e112c13ff8a8e03908497939"
+    },
+    "DEMO_RUNBOOK.md": {
+      "bytes": 5716,
+      "sha256": "d6306107024e6a9beaa7a7683d6e8113070d69bad65c29cd4a0e53af1b1150c3"
+    },
+    "EVALUATION.md": {
+      "bytes": 2645,
+      "sha256": "187d057a2dc3f826a2e5c1b029f8e7d6a0567b04ffdd899c10017602c3be6129"
+    },
+    "RUBRIC_MAP.md": {
+      "bytes": 1990,
+      "sha256": "d4f6afdc509855c38cc202bf6ac198cca48ead702bfb8837c33282feb13b56a1"
+    },
+    "Odie_W13_Final_Demo.pptx": {
+      "bytes": 107296,
+      "sha256": "d7b24fe741ef91595ab1387d2b7a539232c66073e880740933b3fbccb9d01d61"
+    },
+    "SPEAKER_SCRIPT.md": {
+      "bytes": 8018,
+      "sha256": "1d04d8830dca829b2dbcf6c599afd25a50d68f2123032fe83d630ee00fed6362"
+    },
+    "SUBMISSION.md": {
+      "bytes": 2565,
+      "sha256": "9f0ff5d9faf89fbaed41b4aa35c114af7d5791b85792219b408d732a9692b725"
+    },
+    "ARTIFACT_MANIFEST.json": {
+      "bytes": 5482,
+      "sha256": "d9d03e7daf3b9fb668969e3b6ec81d432d5c10d48236124f376dfc93d7a492b2"
+    },
+    "evidence/tests.txt": {
+      "bytes": 983,
+      "sha256": "19fd9425bc8346bc6a15b194cba44db851230d53f8a2b26a63f0058f4d663979"
+    },
+    "evidence/tests.xml": {
+      "bytes": 7734,
+      "sha256": "72349df74352bba0446a9d019db249213abdd6e47476199a226d05a01fed20af"
+    },
+    "evidence/validation.json": {
+      "bytes": 3434,
+      "sha256": "618ef68de3fe18155aece028c298f36fe5b6ed6f8db20c5c7839a638be4a4a40"
+    }
+  }
+}

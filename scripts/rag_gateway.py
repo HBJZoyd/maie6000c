@@ -54,6 +54,14 @@ class QueryRequest(BaseModel):
         return value
 
 
+def _existing_milvus_retriever(module):
+    """Open the existing release with its stored VARCHAR schema, not legacy defaults."""
+    collection = module.Collection(module.COL_NAME)
+    text_field = next(field for field in collection.schema.fields if field.name == "text")
+    module.MAX_TEXT_LENGTH = int(text_field.params["max_length"])
+    return module.MilvusRetriever(docs=None, retrieve=True)
+
+
 class ManualPipeline:
     mode = "live"
 
@@ -90,11 +98,11 @@ class ManualPipeline:
         from openai import OpenAI
         from src.reranker.bge_m3_reranker import BGEM3ReRanker
         from src.retriever.bm25_retriever import BM25
-        from src.retriever.milvus_retriever import MilvusRetriever
+        from src.retriever import milvus_retriever as legacy_milvus
         from src.utils import merge_docs
 
         self.bm25 = BM25(docs=None, retrieve=True)
-        self.milvus = MilvusRetriever(docs=None, retrieve=True)
+        self.milvus = _existing_milvus_retriever(legacy_milvus)
         self.reranker = BGEM3ReRanker(model_path=constant.bge_reranker_tuned_model_path)
         self.merge_docs = merge_docs
         self.model_id = os.environ.get("RAG_MODEL_ID", constant.qwen3_8b_tune_model_name)

@@ -1,0 +1,77 @@
+{
+  "question_id": "728dcdf5-79b7-42ca-94d1-0405e3f963a3",
+  "question_status": "answered",
+  "job_id": 12,
+  "job_status": "completed",
+  "attempts": 1,
+  "generation": 1,
+  "answer_payload": {
+    "schema_version": 2,
+    "answer_type": "answered",
+    "manual": {
+      "manual_id": "tesla-model3-zh",
+      "manual_version": "sha256-baaf110b1b70cdf6",
+      "document_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716",
+      "page_count": 255
+    },
+    "provenance": {
+      "model_id": "LLaMA-Factory-main/output/qwen3_lora_sft_int4",
+      "index_version": "8203b8b186206f1ec8d6e8a5ba726e3dfe0654564856c1423f85feb7eb984c1f",
+      "prompt_version": "manual-evidence-json-v2",
+      "mode": "live"
+    },
+    "steps": [
+      {
+        "text": "Model 3 开启哨兵模式的方法是：在车辆处于驻车模式时，点击可针对当前驾驶循环手动启用或禁用哨兵模式。要在每次离开车辆时自动启用（或禁用）哨兵模式，请通过控制 > 安全 > 哨兵模式启用该设置。如果通过控制 > 哨兵模式启用或禁用了哨兵模式，车辆触摸屏和手机应用程序上的快捷方式将仅适用于当前驾驶过程。在家停车时可以自动关闭哨兵模式，可以通过设置住宅除外，当位于您收藏夹列表中设为“住宅”的位置附近时，哨兵模式不会自动启用。",
+        "source_ids": [
+          "750ada2fe1f0fe8eebf5f25d93fc84a4a9ddfc33b024dd3e3628d0b470b7675d",
+          "c1eb2f9e48f53dc5c4c8813535ae5d00975de9d6242bd0ccde7f8dca25ef86d0"
+        ]
+      }
+    ],
+    "answer": "Model 3 开启哨兵模式的方法是：在车辆处于驻车模式时，点击可针对当前驾驶循环手动启用或禁用哨兵模式。要在每次离开车辆时自动启用（或禁用）哨兵模式，请通过控制 > 安全 > 哨兵模式启用该设置。如果通过控制 > 哨兵模式启用或禁用了哨兵模式，车辆触摸屏和手机应用程序上的快捷方式将仅适用于当前驾驶过程。在家停车时可以自动关闭哨兵模式，可以通过设置住宅除外，当位于您收藏夹列表中设为“住宅”的位置附近时，哨兵模式不会自动启用。",
+    "cite_pages": [
+      39,
+      115
+    ],
+    "sources": [
+      {
+        "page": 39,
+        "excerpt": "### 哨兵模式\nModel 3处于驻车模式时可用，点击可针对当前驾驶循环手动启用或禁用哨兵模式。要在每次离开车辆时自动启用（或禁用）哨兵模式，请通过控制>安全>哨兵模式启用该设置。请参阅哨兵模式页码113了解更多信息。\n注：如果通过控制>哨兵模式启用或禁用了哨兵模式，车辆触摸屏和手机应用程序上的快捷方式将仅适用于当前驾驶过程。",
+        "title": "Model 3 车主手册",
+        "chunk_id": "750ada2fe1f0fe8eebf5f25d93fc84a4a9ddfc33b024dd3e3628d0b470b7675d",
+        "excerpt_sha256": "e66222171a1f230b2ee034ed743c55db1d316d794d26cd5e7083d319a446f694",
+        "manual_id": "tesla-model3-zh",
+        "manual_version": "sha256-baaf110b1b70cdf6",
+        "document_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716"
+      },
+      {
+        "page": 115,
+        "excerpt": "### 哨兵模式设置\n\n- 排除特定位置\n在控制 > 安全 > 哨兵模式下，您可以确定是否希望哨兵模式在某些位置不启用（请参阅住宅、公司和收藏夹目的地 页码 128 了解更多信息）：\n  - 住宅除外：当位于您收藏夹列表中设为“住宅”的位置附近时，哨兵模式不会自动启用。\n  - 公司除外：当位于您收藏夹列表中设为“公司”的位置附近时，哨兵模式不会自动启用。\n  - 收藏夹除外：当位于您收藏夹列表中的任意位置附近时，哨兵模式不会自动启用。\n\n注： 为了能够识别列为“住宅”、“公司”或“收藏夹”的位置，Model 3 必须停在距离保存的位置大约 500 米范围内。\n\n要设置住宅或公司位置，请点击导航 > 设置为住宅/设置为公司。要设置收藏夹，请在地图上查看地址时点击星标。使用触摸屏或手机应用程序手动启用或禁用哨兵模式将覆盖“住宅”、“公司”和“收藏夹”除外首选项，直至下次驾驶。",
+        "title": "Model 3 车主手册",
+        "chunk_id": "c1eb2f9e48f53dc5c4c8813535ae5d00975de9d6242bd0ccde7f8dca25ef86d0",
+        "excerpt_sha256": "89ac284f06b4030e061c5489523494d62c214fe7524d8e8c6ea3034665dc83bf",
+        "manual_id": "tesla-model3-zh",
+        "manual_version": "sha256-baaf110b1b70cdf6",
+        "document_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716"
+      }
+    ],
+    "related_images": [
+      {
+        "id": "c505aae9674645c8154721c19b89fe9d",
+        "page": 39,
+        "title": "弹出消息和车辆警报"
+      },
+      {
+        "id": "708540b38c0477db39ec4726165f67a6",
+        "page": 39,
+        "title": "重新启动触摸屏\n后触摸屏"
+      },
+      {
+        "id": "7fb1c800108759b05372d6c941443698",
+        "page": 39,
+        "title": "手册插图"
+      }
+    ]
+  }
+}

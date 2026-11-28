@@ -1,118 +1,41 @@
 # Operations
 
-## Recorded final presentation
+## GPU assets and startup
 
-Run `scripts\start.cmd -Mode Demo` in CMD and open http://localhost:8030/app.
-The isolated `odie-demo` project executes the API, PostgreSQL and worker normally
-while replaying the dated Sentry Mode answer at the inference boundary. Select
-the standard scenario in the UI. Unrecorded questions receive a scope response.
-The UI, readiness metadata and persisted provenance identify the recording.
-The source PDF is a labelled two-page excerpt packet. See the
-[final demo runbook](../submissions/week13/DEMO_RUNBOOK.md) and ADR 0005.
+Use authorized copies of the manual, model weights, embeddings, reranker, BM25 data, Mongo snapshot and rebuilt Milvus index. The verified target was A10040GB; there is no A800 execution claim. Keep its original Python3.12 environment and pinned packages. Git excludes private assets, credentials and databases.
 
-Team Odie. See [the detailed current runbook](reliability-upgrade.md) for startup,
-task ownership, evidence contracts and pending GPU verification.
+Deploy the five adapters beside the RAG root without replacing original `infer.py` or `src/`: `rag_gateway.py`, `rag_evidence.py`, `rag_assets.py`, `rag_store.py`, `start_rag.py`.
 
-## No-AutoDL engineering deployment
+```bash
+export PYTHONDONTWRITEBYTECODE=1 MONGO_HOST=127.0.0.1
+python rag_assets.py capture --root RAG_ROOT --manual-version ACTUAL_MANUAL_VERSION
+python start_rag.py --root RAG_ROOT --check-assets-only
+python start_rag.py --root RAG_ROOT --manage-services --mongod MONGOD_PATH
+```
 
-Start Docker Desktop, open CMD in the repository and run:
+The verified manual is255 pages, version `sha256-baaf110b1b70cdf6`, PDF SHA256 `baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716`. Capture only quiescent release assets. For an original empty index, `scripts/rebuild_target_index.py` retains baseline, patch, literal ledger and executable rollback; it deliberately refuses a nonempty baseline. Do not casually rerun it against a live release.
 
-~~~cmd
-scripts\start.cmd
-~~~
+The supervisor restores only an empty managed Mongo collection from `data/manual_text.jsonl`, checks CUDA, starts absent dependencies and waits for real readiness. Mongo/vLLM bind loopback; the gateway defaults to127.0.0.1:6001. Logs are under `runtime/`. The observed vLLM memory fraction was0.55; this is configuration, not a capacity benchmark.
 
-Open http://localhost:8020/app. This deployment uses synthetic, visibly labelled
-answers and its own project/volumes. Initial builds need internet. It does not
-validate real AI. Existing .env, real deployment data and W07 tags are preserved.
+## Local application
 
-~~~cmd
-docker --context default compose -p odie-offline -f compose.offline.yaml ps
-docker --context default compose -p odie-offline -f compose.offline.yaml logs --tail 80 worker
-docker --context default compose -p odie-offline -f compose.offline.yaml stop
-~~~
+Create `.env` from `.env.example` only if absent. Keep credentials outside Git. Establish an authorized localhost SSH tunnel, then run `scripts/start.cmd -Mode Remote`. It drains old workers before additive migrations and preserves database volumes. Check `/system/status`, not just a responsive home page.
 
-Start again using the wrapper. Normal stop retains volumes. Never delete volumes
-when you intend to preserve question history.
+```powershell
+docker --context default compose -p maie6000c -f compose.yaml ps
+docker --context default compose -p maie6000c -f compose.yaml logs --tail 80 worker
+```
 
-## Real backend
+Inspect `/questions/ID/attempts`, `/jobs/ID`, `/metrics`, cloud `runtime/rag.log` and `runtime/llm.log`. Chat-completion HTTP200 plus generated-token/request counters corroborate model execution. Gateway duration is not isolated model latency.
 
-Provision trusted private assets and the Python 3.12 GPU environment as described
-in the detailed runbook. Capture the actual manual version and asset hashes,
-export MongoDB records and preserve an immutable release. The source requirements
-snapshot exists; fresh GPU installation/CUDA compatibility remain unverified.
+## Troubleshooting
 
-start_rag.py checks assets/runtime, verifies CUDA and can supervise MongoDB,
-vLLM and the gateway. It restores records only into an empty collection and stops
-only its own child processes. Dependencies must be ready, not merely running.
-Remote logs are under RAG/runtime/. Real gateways bind to loopback.
+- API/database ready but RAG unavailable: check forwarding and GPU Mongo/model/gateway logs.
+- Milvus URI rejected: use the supported `.db` suffix.
+- Schema mismatch: match stored text length, not legacy512. The adapter now reads it dynamically.
+- Invalid evidence: retain attempts and inspect IDs/pages/manual identity; never substitute a synthetic answer.
+- Timeout/tunnel loss: restore dependencies before manually retrying the saved question; automatic retries are bounded.
 
-The updated connect-rag.ps1 copies all required adapter modules and maintains
-forwarding once assets are prepared. Its foreground process must remain open.
-The new gateway requires an asset manifest; uploading one old file is insufficient.
-W07 private configuration can describe existing dependencies but is not the new
-deployment procedure.
+## Shutdown
 
-After the backend/tunnel is ready:
-
-~~~cmd
-scripts\start.cmd -Mode Remote
-~~~
-
-This uses the existing maie6000c project and configured ports. A v1 gateway is
-reported unavailable for new answers. Existing W07 text/excerpts remain readable.
-
-## Inspect and troubleshoot
-
-/system/status reports backend availability and live/fixture mode. /health/live
-checks process liveness; API /health/ready checks SQL (503 on failure).
-Gateway readiness checks MongoDB and the expected LLM model, with a short cache.
-It is not a quality score.
-
-Inspect /questions/{id}, /jobs/{job_id} and /questions/{id}/attempts.
-Logs carry job/attempt IDs. Transient retries remain queued until scheduled;
-invalid evidence fails immediately. Manual retry preserves attempt history.
-
-| Symptom | Action |
-|---|---|
-| Docker engine missing | Start Docker Desktop and wait for its Linux engine |
-| Backend unavailable | Check tunnel, asset/runtime validation, MongoDB and expected LLM |
-| 429 / busy | Inspect scheduled retry; automatic attempts are bounded |
-| Task stuck after crash | Inspect heartbeat/lease; recovery fences old ownership |
-| Invalid evidence | Inspect safe error code and matching gateway contract/release |
-| PDF conflict (409) | Retain the cited manual version; do not substitute newer pages |
-| GPU out of memory | Check duplicate processes; measure before raising concurrency |
-
-Credentials stay in private configuration. Do not export environment dumps or
-commit weights, manuals, indexes, database directories or passwords.
-The API remains a local single-user prototype without public authentication.
-
-## Verification
-
-~~~cmd
-docker --context default compose -p odie-verification -f compose.test.yaml up --build --abort-on-container-exit --exit-code-from tests
-docker --context default compose -p odie-verification -f compose.test.yaml down
-python scripts\verify_offline.py --restart
-~~~
-
-The test project has no database host port and uses temporary PostgreSQL schemas.
-The verifier requires fixture mode, saves its own test question and checks SQL,
-PDF identity and restart persistence. Its output states real AI was not invoked.
-
-Before final real-AI readiness claims, run real smoke tests, evaluate labelled
-questions, and rehearse GPU startup from a fresh environment. W07 real evidence
-remains historical. Keep operational logs and backups private.
-
-## Final demo evidence
-
-Follow [the W13 runbook](../submissions/week13/DEMO_RUNBOOK.md). The new
-`scripts/collect_final_evidence.py` requires an explicit live or fixture mode and
-refuses a mismatched backend. It can capture HTTP acceptance, queued and completed
-SQL state, attempt history, a matching PDF hash, metrics and structured worker
-events. `--pause-worker` briefly stops/starts only the named project's workers;
-`--restart` restarts that project's containers without deleting volumes. Run these
-options only during a controlled demonstration window.
-
-HTTP metrics now label route templates such as `/questions/{question_id}` rather
-than individual UUID paths. This bounds metric cardinality. Logs continue to
-identify requests and worker attempts. Metrics reset with the process and do not
-substitute for the database's durable attempt history.
+Do not set automatic timers. After engineering, remove temporary authorized keys, stop local forwarding and use platform **power off**, verifying stopped status. OS shutdown alone is not a billing check. Do not release instances/data disks. Local `compose down` preserves volumes; never use `down -v` for normal stop. A later demonstration needs the authorized GPU and tunnel restarted.

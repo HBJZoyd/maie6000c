@@ -122,3 +122,22 @@ def test_relocated_asset_snapshot_maps_only_its_old_data_directory(tmp_path):
         "image_path": str(old_root / "data/saved_images/page1_img1.jpg"), "page": 1})
     assert pipeline.image_path(record["id"]) == image
     assert pipeline.image_record({"image_path": str(old_root / "private.jpg"), "page": 1}) is None
+
+
+def test_existing_milvus_schema_is_read_instead_of_assuming_512():
+    from types import SimpleNamespace
+    from scripts.rag_gateway import _existing_milvus_retriever
+
+    for length in (512, 8192):
+        module = SimpleNamespace(MAX_TEXT_LENGTH=512, COL_NAME="hybrid_bge_m3")
+        field = SimpleNamespace(name="text", params={"max_length": length})
+        module.Collection = lambda name: SimpleNamespace(
+            schema=SimpleNamespace(fields=[field]))
+
+        def constructor(**kwargs):
+            assert kwargs == {"docs": None, "retrieve": True}
+            assert module.MAX_TEXT_LENGTH == length
+            return "opened"
+
+        module.MilvusRetriever = constructor
+        assert _existing_milvus_retriever(module) == "opened"

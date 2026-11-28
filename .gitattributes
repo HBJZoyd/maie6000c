@@ -16,3 +16,6 @@ scripts/demo_data/*.pdf binary
 
 # Preserve the supplied legacy RAG source formatting without whitespace cleanup.
 RAG/** whitespace=-blank-at-eol,-blank-at-eof
+
+# Retain historical simulated deliverables byte-for-byte.
+submissions/week13/history/** -text whitespace=-blank-at-eol,-blank-at-eof

@@ -1,17 +1,7 @@
-# ADR 0004: Separate engineering fixture and real GPU startup
+# ADR 0004 — Keep real and simulated startup explicit
 
-Status: accepted for offline operation; GPU deployment rehearsal pending.
+Status: updated at the user’s preservation request, 28 November 2026.
 
-AutoDL is unavailable during this development pass. Provide an isolated Compose
-project with real PostgreSQL/API/worker boundaries and explicitly synthetic output.
-Its UI, API provenance and readiness identify fixture mode, and production mode
-rejects the fixture CLI. No automatic fallback from a failed GPU request is allowed.
+The default launcher selects the real Remote deployment. The previous Offline and Demo modes remain available only by explicit selection, in separate odie-offline/odie-demo projects and volumes. Their UI and returned provenance identify synthetic or recorded output. Production rejects both modes, and unavailable real inference never silently falls back to simulation.
 
-Keep the provisioned GPU architecture, but add asset inventories, MongoDB export/
-empty-target restore, runtime compatibility checks and a foreground supervisor.
-Application dependencies and container bases are pinned. Weights and original
-manual assets are provisioned privately with checksums, not committed to Git.
-
-This allows local engineering verification while the GPU is off. It does not prove
-GPU portability, JSON generation quality or factual accuracy. Those checks remain
-explicit prerequisites for a final real-AI readiness claim.
+Original simulated runs and historical reports/PPT/script are retained beside the new A100 live evidence. Their labels and measurement boundaries remain intact. Deterministic tests continue to use controlled doubles.

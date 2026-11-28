@@ -1,0 +1,2 @@
+{"asctime": "2026-11-28 09:59:12,688", "levelname": "INFO", "service": null, "name": "services.worker.main", "message": "job_claimed", "job_id": 12, "case_id": "728dcdf5-79b7-42ca-94d1-0405e3f963a3", "attempt_id": "f5847ead-2072-4a62-b432-d05e0d5bddb1"}
+{"asctime": "2026-11-28 09:59:18,562", "levelname": "INFO", "service": null, "name": "services.worker.main", "message": "job_completed", "job_id": 12, "attempt_id": "f5847ead-2072-4a62-b432-d05e0d5bddb1"}

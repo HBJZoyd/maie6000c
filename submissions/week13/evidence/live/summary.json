@@ -1,0 +1,14 @@
+{
+  "started_at_utc": "2026-11-28T09:59:06.675228+00:00",
+  "finished_at_utc": "2026-11-28T09:59:27.832236+00:00",
+  "mode": "live",
+  "real_ai_verified": true,
+  "demo_kind": null,
+  "inference_execution": "live_model",
+  "factual_accuracy_evaluated": false,
+  "question_id": "728dcdf5-79b7-42ca-94d1-0405e3f963a3",
+  "input_persisted_before_worker_verified": true,
+  "restart_verified": true,
+  "idempotency_verified": true,
+  "pdf_sha256": "baaf110b1b70cdf6f2493e071ed5ac3248bed732635ba74f77ae376dae659716"
+}

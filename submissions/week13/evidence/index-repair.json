@@ -1,0 +1,18 @@
+{
+  "changed_field": "hybrid_bge_m3 vector rows",
+  "baseline_rows": 0,
+  "modified_rows": 6102,
+  "rollback_rows": 0,
+  "baseline_sha256": "cb26d56e255b7ddd441e4cdb19f8275865f7d70f2b4f9e9c26996b6acfba46bd",
+  "modified_sha256": "8903176b3952009f27f851fc2cf526d5605604a68f682211d527af910a4bfbf2",
+  "rollback_sha256": "cb26d56e255b7ddd441e4cdb19f8275865f7d70f2b4f9e9c26996b6acfba46bd",
+  "binary_patch_verified": true,
+  "deployed": true,
+  "build": {
+    "documents": 6102,
+    "vector_rows": 6102,
+    "max_chunk_utf8_bytes": 5657,
+    "text_field_max_length": 8192
+  },
+  "native_transaction_roles_retained_privately": true
+}

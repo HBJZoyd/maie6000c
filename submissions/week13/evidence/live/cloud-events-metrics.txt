@@ -1,0 +1,11 @@
+INFO:httpx:HTTP Request: POST http://127.0.0.1:8000/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:maie.rag:rag_completed case=728dcdf5-79b7-42ca-94d1-0405e3f963a3 duration=5.77 mode=live
+INFO:httpx:HTTP Request: POST http://127.0.0.1:8000/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:maie.rag:rag_completed case=1118e376-ff76-42fd-84e0-2ec6d6c71cea duration=3.94 mode=live
+vllm:prompt_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 5793.0
+vllm:generation_tokens_total{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 641.0
+vllm:request_success_total{engine="0",finished_reason="stop",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 2.0
+vllm:request_success_total{engine="0",finished_reason="length",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0
+vllm:request_success_total{engine="0",finished_reason="abort",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 0.0
+vllm:e2e_request_latency_seconds_count{engine="0",model_name="LLaMA-Factory-main/output/qwen3_lora_sft_int4"} 2.0
+NVIDIA A100-PCIE-40GB, 40960 MiB, 27089 MiB

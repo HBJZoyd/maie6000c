@@ -1,5 +1,9 @@
-All checks passed!
-..........................................................               [100%]
+ Container odie-verification-db-1 Running 
+ Container odie-verification-db-1 Waiting 
+ Container odie-verification-db-1 Healthy 
+ Container odie-verification-tests-run-8af97d13449d Creating 
+ Container odie-verification-tests-run-8af97d13449d Created 
+...........................................................              [100%]
 =============================== warnings summary ===============================
 ../usr/local/lib/python3.11/site-packages/starlette/testclient.py:51
   /usr/local/lib/python3.11/site-packages/starlette/testclient.py:51: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
@@ -11,4 +15,4 @@ All checks passed!
 
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 ------------------- generated xml file: /evidence/tests.xml --------------------
-58 passed, 2 warnings in 5.58s
+59 passed, 2 warnings in 7.00s

@@ -1,8 +1,8 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Offline','Remote','Demo')][string]$Mode = 'Offline',
+    [ValidateSet('Offline','Remote','Demo')][string]$Mode = 'Remote',
     [ValidatePattern('^[a-z0-9][a-z0-9_-]+$')][string]$ProjectName = 'odie-offline',
-    [ValidateRange(1,65535)][int]$ApiPort = 8020,
+    [ValidateRange(1,65535)][int]$ApiPort = 8000,
     [switch]$CheckOnly
 )
 $ErrorActionPreference = 'Stop'
@@ -15,6 +15,7 @@ try {
         Copy-Item -LiteralPath '.env.example' -Destination '.env'
     }
     if ($Mode -eq 'Offline') {
+        if (-not $PSBoundParameters.ContainsKey('ApiPort')) { $ApiPort = 8020 }
         $composeFile = 'compose.offline.yaml'
         $env:OFFLINE_API_PORT = [string]$ApiPort
     } elseif ($Mode -eq 'Demo') {

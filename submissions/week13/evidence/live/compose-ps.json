@@ -1,0 +1,26 @@
+[
+  {
+    "Service": "ai",
+    "State": "running",
+    "Health": "healthy",
+    "Status": "Up 2 hours (healthy)"
+  },
+  {
+    "Service": "api",
+    "State": "running",
+    "Health": "healthy",
+    "Status": "Up 2 hours (healthy)"
+  },
+  {
+    "Service": "db",
+    "State": "running",
+    "Health": "healthy",
+    "Status": "Up 2 hours (healthy)"
+  },
+  {
+    "Service": "worker",
+    "State": "running",
+    "Health": "",
+    "Status": "Up 9 seconds"
+  }
+]

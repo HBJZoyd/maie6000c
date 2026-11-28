@@ -1,117 +1,35 @@
-# Final Technical Brief and Postmortem
+# Final technical brief
 
-Team Odie. MAIE6000C. Submission account: C0216RC / RUICHAO CHEN.
+## Problem and scope
 
-## Product and scope
+Model3 owners and support staff need to locate instructions in a long Chinese manual and inspect an answer's support. The application accepts single-turn questions, persists input before background work, saves cited answers and retains history. It does not control vehicles, select across model years, authenticate public users or replace the actual manual. MAIE6000C is the course; Odie is the team.
 
-The Model 3 Manual Assistant gives owners and support staff a question-answer
-interface over a Chinese owner manual. It saves questions and answers, displays
-source excerpts and ties results to a document identity. Scope is one manual,
-single-turn questions and local browser access. Intended value is easier manual
-navigation and source checking; business impact is not quantified.
+## Integrated implementation
 
-## Stable core architecture
+FastAPI atomically commits question and pending job before HTTP202. An independent worker claims it, records an attempt and calls the AI service. Authenticated localhost SSH forwarding reaches the GPU RAG gateway. The pipeline retains existing BM25 and BGE-M3 dense/sparse retrieval, trained reranking and fine-tuned4-bit Qwen3 via vLLM. Generated steps must reference actual retrieved IDs; gateway and application validate manual identity, page bounds, excerpt checksums and the complete envelope before saving.
 
-The core path remains the W07 architecture: browser, FastAPI, PostgreSQL, separate
-worker, AI HTTP boundary and AutoDL RAG. The real pipeline combines BM25 and
-Milvus Lite retrieval, parent-document merging, BGE reranking and Qwen3 generation
-through vLLM. MongoDB supplies document records. Final changes concern adaptation,
-task reliability, evidence contracts and repeatability rather than replacement
-of the underlying retrieval or model architecture.
+ZHANG Yiming's reliability layer is preserved. Idempotency protects duplicate acceptance. Claim tokens, generations, heartbeats and token-checked completion fence stale owners; retries are bounded and attempts remain inspectable. This is at-least-once inference: crashes may repeat GPU work even when fenced writes protect stored state.
 
-One SQL transaction commits the input and pending job before HTTP 202. The worker
-claims a job, commits ownership before HTTP, calls the AI service, validates the
-envelope and saves the terminal state. The browser reads persisted output.
-Cases store input and answer envelopes; jobs store scheduling and ownership;
-job_attempts store generations and outcomes. Additive migrations preserve earlier
-data without inventing document metadata for historical records.
+## Executed migration and repair
 
-## Demonstration design
+The user approved an A10040GB backup and explicitly selected A100 as the target. These results make no A800 inference claim. The private system image preserved Python3.12.13 and original GPU packages; data moved separately. Platform copying required an explicitly authorized temporary source stop, followed by no-GPU restoration.
 
-An explicitly selected recorded adapter in the odie-demo Docker project replays
-the exact standard Sentry Mode question/answer recorded on 31 October 2026.
-Submission, SQL persistence, worker execution, validation, logs, metrics and
-recovery all execute against the current application.
+All **1571 files /43,425,756,317 bytes** matched SHA256 before repair. The original Milvus collection was empty. A separate copy of genuine Mongo data exported **6102 documents**; the original embedding/retriever built6102 vectors. The measured maximum was **5657 UTF8 bytes**, requiring text length **8192**, not legacy512.
 
-The source packet has two demonstration pages containing saved excerpts. These
-page numbers differ from original manual pages 39 and 115, retained in titles.
-The packet and UI identify the recording. Unrecorded questions receive a scope
-response without invented citations. Provenance remains fixture mode, and the
-adapter is forbidden in production. No automatic real-to-recorded fallback exists.
+Two concrete incompatibilities were corrected in adapters: pymilvus rejected a `.sqlite` staging URI but accepted `.db`; the original retriever also passed a512 schema while opening an8192 release. The gateway now reads the stored field before constructing that retriever. Original source `infer.py` and `src/` stayed unchanged.
 
-This controls the presentation's inference boundary while exercising the actual
-application path. The run measures engineering behavior and reference consistency,
-not new retrieval, generation quality or live-model latency. ADR 0005 records
-this decision alongside the earlier queue, evidence and deployment decisions.
+The native transaction retained baseline, changed database, reconstructing binary patch, literal command/output ledger and executable rollback. Matching COUNT inputs observed **0 /6102 /0** for baseline, modified and restored copies. Restored SHA256 equalled baseline; the patch reconstructed the modified hash. Only then was the repaired release deployed. A writable runtime Milvus copy remains separate from that release, and managed Mongo uses `runtime/mongo`.
 
-## Reliability and maintainability
+## Real validation
 
-The PostgreSQL queue keeps input and job creation atomic without a separate
-broker at this scale. Workers use SKIP LOCKED, unique claim tokens, increasing
-generations and conditional heartbeats. Completion/failure verifies ownership
-under lock before updating job, attempt and result together. Recovery fences
-expired owners, preventing a late response from overwriting a newer attempt.
+At2026-11-28 17:59 HKT, question `728dcdf5-79b7-42ca-94d1-0405e3f963a3` asked about Sentry enabling and home exclusion. With the worker paused, SQL already held queued input/pending job and no answer. After resumption, Qwen3 was actually called; the saved result cited manual pages39/115 with excerpts and model/index/prompt identity. Idempotent resubmission returned the same request; local-stack restart retained the same answer and attempts. The collector exited0.
 
-Transient failures receive bounded backoff with jitter; invalid evidence fails
-immediately. Manual retries retain prior attempts. The gateway's durable SQLite
-replay cache reduces repeated completed requests, but a crash before cache commit
-can repeat inference. Execution is at least once with fenced application writes.
+A separate charging question passed live smoke and persisted pages142/144. Gateway durations were5.77s and3.94s, including retrieval and generation. The corresponding cloud snapshot shows two chat-completion HTTP200 responses,2 successful requests,5793 prompt tokens and641 generated tokens. These corroborate model execution, not broad quality/throughput.
 
-Shared schemas and persistence live in services/common. The gateway separates
-asset validation, evidence checks and result replay. Image digests and dependency
-locks support reproducibility. Separate demo, test and real deployments isolate
-volumes. Normal shutdown retains history.
+For the current real-path implementation, **59 unit/integration/PostgreSQL tests** passed with two dependency deprecation warnings. The additional real-GPU smoke passed; Ruff, JavaScript syntax and PowerShell parsing passed. Historical simulated runs remain explicitly labelled and isolated from the real deployment.
 
-## AI and source integrity
+## Findings and limitations
 
-The real model produces answer steps tied to retrieved source IDs. The gateway
-rejects IDs outside the candidate set. The application validates page bounds,
-manual identity/version, PDF hash, excerpt checksums and cited-step consistency
-again. PDF requests reject a different document identity. Clarification and
-insufficient-evidence outcomes remain distinct from answers.
+The engineering acceptance event is real with authorized private assets. Citation integrity is not semantic entailment. The generated Sentry first instruction omits a UI-icon detail and still requires human checking against context. One manual and two distinct live questions cannot support generalized accuracy, safety or capacity claims. Human-reviewed evaluation, multi-manual/version selection, public authorization and controlled load/failure experiments remain next priorities.
 
-The recorded adapter uses this same contract with explicit recorded provenance.
-These checks protect references. Human review still determines whether a claim
-follows from the full source context and applies to the user's vehicle.
-
-## Evidence and validation
-
-Docker tests cover unit behavior, service integration and real PostgreSQL.
-Important risks include duplicate submissions, concurrent claims, heartbeat,
-stale ownership, retry limits, corrupt references, migration preservation and
-recorded-mode restrictions. The actual commands and results are indexed in
-`evidence/validation.json`.
-
-The captured Sentry Mode demo proves HTTP 202, queued SQL before worker execution,
-claim/completion events, stored output, source-packet identity, metrics and restart
-survival. A second question demonstrates the out-of-recording response. W07
-independently documents earlier real inference. No accuracy percentage, uptime
-SLO, live-model latency percentile or user study is inferred from this replay.
-
-## Operations and boundaries
-
-Docker default remains the local environment. The demo starts with
-`scripts\start.cmd -Mode Demo` on port 8030. Liveness, SQL readiness, backend
-status, JSON events, request metrics and attempt history support diagnosis.
-Metrics use route templates rather than per-question UUID series. Process metrics
-reset on restart; attempt history remains durable in SQL.
-
-The local single-user prototype has no public accounts, identity-scoped quotas or
-full distributed tracing. Credentials and private runtime assets stay outside Git.
-A public pilot needs access controls, retention policy, reviewed factual quality
-and explicit manual/version coverage.
-
-## Postmortem and priorities
-
-W07 integrated the terminal RAG prototype into an HTTP/browser workflow. The
-reliability pass addressed the lifecycle around a model call: accepted inputs,
-interrupted workers, retries, duplicate requests and source identity. The final
-presentation makes that lifecycle reproducible through a fixed, dated example.
-
-The key lesson is to keep application correctness and model quality separately
-checkable. A reliably saved response still needs factual review. The presentation
-therefore shows the user outcome together with its SQL state and operational evidence.
-
-Next priorities are human-reviewed factual evaluation, repeatable real-model
-runtime/asset checks, manual-version selection and public access controls before
-voice input, conversation memory or a broader vehicle catalogue.
+The delivery preserves W03/W04/W07, ZHANG Yiming’s reliability contribution and the existing final commit. The old recorded demo is retained alongside dated live evidence; neither is relabelled as the other. GPU resources are temporary: platform power-off after engineering stops charges without releasing data. A new live demonstration requires restarting the GPU, environment and tunnel.
