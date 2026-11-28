@@ -1,0 +1,12 @@
+{
+  "started_at_utc": "2026-11-27T14:50:22.402071+00:00",
+  "finished_at_utc": "2026-11-27T14:50:35.432429+00:00",
+  "mode": "fixture",
+  "real_ai_verified": false,
+  "factual_accuracy_evaluated": false,
+  "question_id": "f7fe9ac8-df30-439e-866f-cccd20d0b572",
+  "input_persisted_before_worker_verified": true,
+  "restart_verified": true,
+  "idempotency_verified": true,
+  "pdf_sha256": "977b2ffa933ae322635d7ff0281c29de04393f9408eb6b4f4da7286895c00573"
+}

@@ -66,14 +66,6 @@ If this PR is related to a course milestone, confirm the relevant items.
 - [ ] milestone-ready state is reviewable
 - [ ] required tag will be created when appropriate
 
-## AI use disclosure
-
-If generative AI tools materially assisted this work, briefly note the affected area(s) and confirm that the work was reviewed and understood.
-
-Affected files or areas:
-
-Verification performed:
-
 ## Reviewer notes
 
 Anything the reviewer should focus on:

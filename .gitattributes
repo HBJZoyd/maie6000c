@@ -5,5 +5,14 @@ submissions/week07/*.pptx binary
 submissions/week07/*.md text eol=lf
 submissions/week07/ARTIFACT_MANIFEST.json text eol=lf
 
+# Keep final verification evidence byte-identical across checkouts.
+submissions/week13/evidence/** -text whitespace=-blank-at-eol,-blank-at-eof
+submissions/week13/*.pptx binary
+submissions/week13/*.md text eol=lf
+submissions/week13/*.html text eol=lf
+submissions/week13/ARTIFACT_MANIFEST.json text eol=lf
+scripts/demo_data/** -text whitespace=-blank-at-eol,-blank-at-eof
+scripts/demo_data/*.pdf binary
+
 # Preserve the supplied legacy RAG source formatting without whitespace cleanup.
 RAG/** whitespace=-blank-at-eol,-blank-at-eof

@@ -224,7 +224,8 @@ def create_app(pipeline=None, rag_dir=None, api_token=None, store_path=None):
         mode = getattr(app.state.pipeline, "mode", "fixture")
         if not value:
             raise HTTPException(status_code=503, detail="RAG dependencies unavailable")
-        return {"status": "ready", "mode": mode, "contract_version": 2}
+        return {"status": "ready", "mode": mode, "contract_version": 2,
+                "demo_kind": getattr(app.state.pipeline, "demo_kind", None)}
 
     @app.post("/rag/query", dependencies=[Depends(authorize)])
     def query(payload: QueryRequest):
@@ -288,17 +289,24 @@ if __name__ == "__main__":
     parser.add_argument("--rag-dir", default=os.environ.get("RAG_DIR", "."))
     parser.add_argument("--port", type=int, default=6001)
     parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--mode", choices=["live", "fixture"], default="live")
+    parser.add_argument("--mode", choices=["live", "fixture", "replay"], default="live")
     args = parser.parse_args()
     pipeline = None
-    if args.mode == "fixture":
+    if args.mode in {"fixture", "replay"}:
         if os.environ.get("APP_ENV", "").lower() == "production":
             parser.error("Fixture mode is forbidden in production")
         try:
             from scripts.fixture_rag import FixturePipeline
         except ModuleNotFoundError:
             from fixture_rag import FixturePipeline
-        pipeline = FixturePipeline(args.rag_dir)
+        if args.mode == "replay":
+            try:
+                from scripts.replay_rag import ReplayPipeline
+            except ModuleNotFoundError:
+                from replay_rag import ReplayPipeline
+            pipeline = ReplayPipeline(args.rag_dir)
+        else:
+            pipeline = FixturePipeline(args.rag_dir)
     import uvicorn
     logging.basicConfig(level=logging.INFO)
     uvicorn.run(create_app(pipeline=pipeline, rag_dir=args.rag_dir),

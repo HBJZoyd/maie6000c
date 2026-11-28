@@ -51,7 +51,3 @@ State the most important limitations honestly.
 - `docs/adrs/`
 - `submissions/week13/final-technical-brief.md`
 - other final artifacts:
-
-## 8. AI Use Statement
-
-Summarize any generative AI assistance used in preparing this milestone and how the team verified the work.

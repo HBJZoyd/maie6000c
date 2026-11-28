@@ -1,5 +1,15 @@
 # Operations
 
+## Recorded final presentation
+
+Run `scripts\start.cmd -Mode Demo` in CMD and open http://localhost:8030/app.
+The isolated `odie-demo` project executes the API, PostgreSQL and worker normally
+while replaying the dated Sentry Mode answer at the inference boundary. Select
+the standard scenario in the UI. Unrecorded questions receive a scope response.
+The UI, readiness metadata and persisted provenance identify the recording.
+The source PDF is a labelled two-page excerpt packet. See the
+[final demo runbook](../submissions/week13/DEMO_RUNBOOK.md) and ADR 0005.
+
 Team Odie. See [the detailed current runbook](reliability-upgrade.md) for startup,
 task ownership, evidence contracts and pending GPU verification.
 
@@ -91,3 +101,18 @@ PDF identity and restart persistence. Its output states real AI was not invoked.
 Before final real-AI readiness claims, run real smoke tests, evaluate labelled
 questions, and rehearse GPU startup from a fresh environment. W07 real evidence
 remains historical. Keep operational logs and backups private.
+
+## Final demo evidence
+
+Follow [the W13 runbook](../submissions/week13/DEMO_RUNBOOK.md). The new
+`scripts/collect_final_evidence.py` requires an explicit live or fixture mode and
+refuses a mismatched backend. It can capture HTTP acceptance, queued and completed
+SQL state, attempt history, a matching PDF hash, metrics and structured worker
+events. `--pause-worker` briefly stops/starts only the named project's workers;
+`--restart` restarts that project's containers without deleting volumes. Run these
+options only during a controlled demonstration window.
+
+HTTP metrics now label route templates such as `/questions/{question_id}` rather
+than individual UUID paths. This bounds metric cardinality. Logs continue to
+identify requests and worker attempts. Metrics reset with the process and do not
+substitute for the database's durable attempt history.

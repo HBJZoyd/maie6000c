@@ -3,6 +3,8 @@ import os
 import subprocess
 import sys
 
+import pytest
+
 from fastapi.testclient import TestClient
 
 from scripts.fixture_rag import FixturePipeline
@@ -23,9 +25,10 @@ def test_offline_gateway_is_labelled_and_pdf_identity_is_checked(tmp_path):
         assert client.get("/rag/manual").status_code == 409
 
 
-def test_fixture_mode_is_rejected_in_production(tmp_path):
+@pytest.mark.parametrize("mode", ["fixture", "replay"])
+def test_fixture_mode_is_rejected_in_production(tmp_path, mode):
     result = subprocess.run(
-        [sys.executable, "-m", "scripts.rag_gateway", "--mode", "fixture",
+        [sys.executable, "-m", "scripts.rag_gateway", "--mode", mode,
          "--rag-dir", str(tmp_path)], env=dict(os.environ, APP_ENV="production"),
         capture_output=True, timeout=10,
     )

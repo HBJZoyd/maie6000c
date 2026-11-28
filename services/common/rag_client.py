@@ -70,7 +70,8 @@ def manual_backend_status() -> dict:
     except (RagUnavailable, httpx.HTTPError, ValueError):
         ready = False
     return {"status": "ready" if ready else "unavailable", "ready": ready,
-            "mode": data.get("mode", "unknown") if ready else "unknown"}
+            "mode": data.get("mode", "unknown") if ready else "unknown",
+            "demo_kind": data.get("demo_kind") if ready else None}
 
 
 def fetch_manual_asset(path: str) -> httpx.Response:

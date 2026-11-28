@@ -1,0 +1,19 @@
+# Recorded presentation scenario. API, SQL and workers execute normally.
+services:
+  db:
+    extends: {file: compose.offline.yaml, service: db}
+    volumes: !override [demo_postgres:/var/lib/postgresql/data]
+  ai:
+    extends: {file: compose.offline.yaml, service: ai}
+  api:
+    extends: {file: compose.offline.yaml, service: api}
+    ports: !override ["127.0.0.1:${DEMO_API_PORT:-8030}:8000"]
+  worker:
+    extends: {file: compose.offline.yaml, service: worker}
+  rag:
+    extends: {file: compose.offline.yaml, service: rag}
+    command: python -m scripts.rag_gateway --mode replay --rag-dir /runtime --host 0.0.0.0
+    volumes: !override [demo_rag:/runtime]
+volumes:
+  demo_postgres:
+  demo_rag:

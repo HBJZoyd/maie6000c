@@ -13,7 +13,9 @@ def test_real_manual_question_persists_cited_answer():
     if not base or os.environ.get("SMOKE_MANUAL_RAG") != "1":
         pytest.skip("Set SMOKE_BASE_URL and SMOKE_MANUAL_RAG=1 for the live GPU test")
     with httpx.Client(base_url=base, timeout=15, trust_env=False) as client:
-        assert client.get("/system/status").json()["rag"] == "ready"
+        status = client.get("/system/status").json()
+        assert status["rag"] == "ready"
+        assert status["mode"] == "live", "Real-AI smoke test refuses synthetic backends"
         response = client.post(
             "/questions", json={"question": "Model 3 如何设置充电上限和预约充电？"}
         )
@@ -27,5 +29,7 @@ def test_real_manual_question_persists_cited_answer():
             time.sleep(0.5)
         assert result["status"] == "answered", result
         assert result["answer"] and result["cite_pages"] and result["sources"]
+        assert result["manual"]["document_sha256"]
+        assert result["provenance"]["mode"] == "live"
         assert client.get(f"/jobs/{accepted['job_id']}").json()["status"] == "completed"
         assert client.get(f"/questions/{accepted['id']}").json()["answer"] == result["answer"]

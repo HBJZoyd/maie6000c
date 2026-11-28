@@ -1,0 +1,6 @@
+{
+  "api": "ready",
+  "database": "ready",
+  "rag": "ready",
+  "mode": "fixture"
+}

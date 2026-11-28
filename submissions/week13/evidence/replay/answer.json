@@ -1,0 +1,61 @@
+{
+  "id": "a9ea6d2c-710e-4d04-bda7-840d201b75b0",
+  "question": "Model 3 如何开启哨兵模式？在家停车时可以自动关闭吗？",
+  "status": "answered",
+  "answer": "Model 3可以通过以下方式开启哨兵模式：在车辆处于驻车挡时，导航到控制 > 安全 > 行车记录仪以启用行车记录仪（必须启用行车记录仪，哨兵模式才能正常工作），然后点击控制 > 哨兵模式 > 开。如果要在家停车时自动关闭哨兵模式，则需要通过控制>安全>哨兵模式设置来配置“住宅除外”选项，并确保Model 3停在距离保存的位置大约500米范围内；此外，在每次离开车辆时自动启用或禁用哨兵模式，请通过控制>安全>哨兵模式启用该设置",
+  "cite_pages": [
+    1,
+    2
+  ],
+  "sources": [
+    {
+      "page": 1,
+      "excerpt": "### 哨兵模式\nModel 3处于驻车模式时可用，点击可针对当前驾驶循环手动启用或禁用哨兵模式。要在每次离开车辆时自动启用（或禁用）哨兵模式，请通过控制>安全>哨兵模式启用该设置。请参阅哨兵模式页码113了解更多信息。\n注：如果通过控制>哨兵模式启用或禁用了哨兵模式，车辆触摸屏和手机应用程序上的快捷方式将仅适用于当前驾驶过程。",
+      "title": "W07 录制摘录（原手册第 39 页）",
+      "chunk_id": "1b01e9fb5ee268d40a7a76e324d28f4cd51bec36063f0f968612ff3bd5e24b13",
+      "excerpt_sha256": "e66222171a1f230b2ee034ed743c55db1d316d794d26cd5e7083d319a446f694",
+      "manual_id": "w07-recorded-demo-excerpts",
+      "manual_version": "Demo excerpts / recording 2026-10-31",
+      "document_sha256": "8ed5f7c3be1b73a1f1d283cc5443565f2963eb5ee02e057af08bb6223b1c74fb"
+    },
+    {
+      "page": 2,
+      "excerpt": "### 哨兵模式设置\n• 排除特定位置\n在控制 > 安全 > 哨兵模式下，您可以确定是否希望哨兵模式在某些位置不启用（请参阅住宅、公司和收藏夹目的地 页码128了解更多信息）：\n  - 住宅除外：当位于您收藏夹列表中设为“住宅”的位置附近时，哨兵模式不会自动启用。\n  - 公司除外：当位于您收藏夹列表中设为“公司”的位置附近时，哨兵模式不会自动启用。\n  - 收藏夹除外：当位于您收藏夹列表中的任意位置附近时，哨兵模式不会自动启用。\n注：为了能够识别列为“住宅”、“公司”或“收藏夹”的位置，Model 3必须停在距离保存的位置大约500米范围内。\n要设置住宅或公司位置，请点击导航 > 设置为住宅/设置为公司。要设置收藏夹，请在地图上查看地址时点击星标。使用触摸屏或手机应用程序手动启用或禁用哨兵模式将覆盖“住宅”、“公司”和“收藏夹”除外首选项，直至下次驾驶。",
+      "title": "W07 录制摘录（原手册第 115 页）",
+      "chunk_id": "d844787a394568c57286620e06ce92d4deb00a15e76b42711644740dfaedde59",
+      "excerpt_sha256": "6e083b0495fdf1caeac9591042fa8becb6265d4b50371a007447498a085a788d",
+      "manual_id": "w07-recorded-demo-excerpts",
+      "manual_version": "Demo excerpts / recording 2026-10-31",
+      "document_sha256": "8ed5f7c3be1b73a1f1d283cc5443565f2963eb5ee02e057af08bb6223b1c74fb"
+    }
+  ],
+  "answer_type": "answered",
+  "manual": {
+    "manual_id": "w07-recorded-demo-excerpts",
+    "manual_version": "Demo excerpts / recording 2026-10-31",
+    "document_sha256": "8ed5f7c3be1b73a1f1d283cc5443565f2963eb5ee02e057af08bb6223b1c74fb",
+    "page_count": 2
+  },
+  "provenance": {
+    "model_id": "recorded-w07-no-model-call",
+    "index_version": "5fbeeefc94bbe998693dcfee4f4d4fe8d5e61f09b919ba02e815fe39f5129cb6",
+    "prompt_version": "recorded-answer-replay-v1",
+    "mode": "fixture"
+  },
+  "steps": [
+    {
+      "text": "Model 3可以通过以下方式开启哨兵模式：在车辆处于驻车挡时，导航到控制 > 安全 > 行车记录仪以启用行车记录仪（必须启用行车记录仪，哨兵模式才能正常工作），然后点击控制 > 哨兵模式 > 开。如果要在家停车时自动关闭哨兵模式，则需要通过控制>安全>哨兵模式设置来配置“住宅除外”选项，并确保Model 3停在距离保存的位置大约500米范围内；此外，在每次离开车辆时自动启用或禁用哨兵模式，请通过控制>安全>哨兵模式启用该设置",
+      "source_ids": [
+        "1b01e9fb5ee268d40a7a76e324d28f4cd51bec36063f0f968612ff3bd5e24b13",
+        "d844787a394568c57286620e06ce92d4deb00a15e76b42711644740dfaedde59"
+      ]
+    }
+  ],
+  "next_run_at": null,
+  "related_images": [],
+  "error": null,
+  "job_id": 1,
+  "attempts": 1,
+  "created_at": "2026-11-27T15:36:50.476258Z",
+  "updated_at": "2026-11-27T15:36:54.807315Z"
+}

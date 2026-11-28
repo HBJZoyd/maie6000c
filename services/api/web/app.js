@@ -66,15 +66,22 @@ function renderRecord(record) {
   $('answer-time').textContent = dateLabel(record.updated_at) + (record.manual ?
     ` · ${record.manual.manual_version}` : ' · 历史记录：手册版本未标注');
   if (record.provenance?.mode === 'fixture') {
-    const warning = document.createElement('p'); warning.textContent = '离线工程测试：模拟结果，未调用真实 AI。';
+    const warning = document.createElement('p'); warning.textContent =
+      record.provenance.model_id === 'recorded-w07-no-model-call' ?
+      '模拟演示 · 历史回答回放（录制日期：2026-10-31）' : '离线工程测试：模拟结果，未调用真实 AI。';
     content.prepend(warning);
   }
   const pages = $('page-links'), excerpts = $('source-excerpts'), images = $('related-images');
+  document.querySelector('.source-heading span').textContent =
+    record.provenance?.model_id === 'recorded-w07-no-model-call' ?
+    '点击页码查看演示摘录；原手册页码见标题' : '点击页码查看原始手册';
   pages.replaceChildren(); excerpts.replaceChildren(); images.replaceChildren();
   for (const page of record.cite_pages || []) {
     const link = document.createElement('a'); link.className = 'page-link'; link.href = `/manual.pdf#page=${page}`;
     if (record.manual) link.href = `/manual.pdf?sha256=${record.manual.document_sha256}#page=${page}`;
-    link.target = '_blank'; link.rel = 'noopener'; link.textContent = `手册第 ${page} 页 ↗`; pages.append(link);
+    link.target = '_blank'; link.rel = 'noopener';
+    link.textContent = record.provenance?.model_id === 'recorded-w07-no-model-call' ?
+      `演示摘录第 ${page} 页 ↗` : `手册第 ${page} 页 ↗`; pages.append(link);
   }
   for (const source of record.sources || []) {
     const detail = document.createElement('details'); detail.className = 'source-detail';
@@ -114,7 +121,8 @@ async function loadHistory() {
   catch { notice('历史提问暂时无法读取，请检查项目服务是否正常运行。'); }
 }
 async function checkConnection() {
-  try { const status = await request('/system/status'); ready = status.rag === 'ready'; window.backendMode = status.mode; }
+  try { const status = await request('/system/status'); ready = status.rag === 'ready';
+    window.backendMode = status.mode; window.demoKind = status.demo_kind; }
   catch { ready = false; }
   $('connection').className = `connection ${ready ? 'ready' : 'unavailable'}`;
   $('connection').querySelector('span').textContent = ready ?
@@ -122,6 +130,19 @@ async function checkConnection() {
   $('composer-note').textContent = ready ? '回答依据已收录的手册，功能可能随车型年份、配置及软件版本不同。' : '问答服务尚未连接。历史记录仍可查看，连接后即可开始提问。';
   if (ready && window.backendMode === 'fixture') {
     $('composer-note').textContent = '当前为离线工程测试：仅验证提交、异步处理和保存，不调用真实 AI。';
+  }
+  if (ready && window.demoKind === 'recorded-replay') {
+    $('connection').querySelector('span').textContent = '模拟演示 · 历史回放';
+    $('composer-note').textContent = '演示使用已录制的哨兵模式回答，提交、后台处理与保存实时运行。';
+    $('manual-link').textContent = '演示摘录 ↗';
+    const suggestions = document.querySelectorAll('[data-question]');
+    suggestions[0].querySelector('strong').textContent = '哨兵模式演示';
+    suggestions[1].dataset.question = '这个功能怎么设置？';
+    suggestions[1].querySelector('strong').textContent = '演示范围之外';
+    suggestions[1].querySelector('small').textContent = '展示明确的范围提示';
+    suggestions[2].dataset.question = 'Model 3 明年的保险价格是多少？';
+    suggestions[2].querySelector('strong').textContent = '不支持的问题';
+    suggestions[2].querySelector('small').textContent = '展示不编造回答的结果';
   }
   updateSend();
 }

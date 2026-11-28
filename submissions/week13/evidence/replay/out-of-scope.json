@@ -1,0 +1,29 @@
+{
+  "id": "0c037c29-a857-48f3-80bb-658406bdc53e",
+  "question": "Model 3 明年的保险价格是多少？",
+  "status": "answered",
+  "answer": "本演示回放已录制的固定场景，请点击“哨兵模式演示”提交标准问题。",
+  "cite_pages": [],
+  "sources": [],
+  "answer_type": "insufficient_evidence",
+  "manual": {
+    "manual_id": "w07-recorded-demo-excerpts",
+    "manual_version": "Demo excerpts / recording 2026-10-31",
+    "document_sha256": "8ed5f7c3be1b73a1f1d283cc5443565f2963eb5ee02e057af08bb6223b1c74fb",
+    "page_count": 2
+  },
+  "provenance": {
+    "model_id": "recorded-w07-no-model-call",
+    "index_version": "5fbeeefc94bbe998693dcfee4f4d4fe8d5e61f09b919ba02e815fe39f5129cb6",
+    "prompt_version": "recorded-answer-replay-v1",
+    "mode": "fixture"
+  },
+  "steps": [],
+  "next_run_at": null,
+  "related_images": [],
+  "error": null,
+  "job_id": 2,
+  "attempts": 1,
+  "created_at": "2026-11-27T15:37:41.881590Z",
+  "updated_at": "2026-11-27T15:37:43.562987Z"
+}

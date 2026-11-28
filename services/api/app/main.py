@@ -95,7 +95,9 @@ async def observe_requests(request: Request, call_next):
         return response
     finally:
         duration = perf_counter() - start
-        path = request.url.path
+        # Route templates avoid a new metrics series for every question UUID.
+        route = request.scope.get("route")
+        path = getattr(route, "path", "unmatched")
         status = str(response.status_code) if response is not None else "500"
         HTTP_REQUESTS.labels(request.method, path, status).inc()
         HTTP_REQUEST_LATENCY.labels(request.method, path).observe(duration)
@@ -316,7 +318,8 @@ def system_status(db: Session = Depends(get_db)) -> dict:
     except (httpx.HTTPError, ValueError):
         ready = False
     return {"api": "ready", "database": "ready", "rag": "ready" if ready else "unavailable",
-            "mode": backend.get("mode", "unknown") if ready else "unknown"}
+            "mode": backend.get("mode", "unknown") if ready else "unknown",
+            "demo_kind": backend.get("demo_kind") if ready else None}
 
 
 @app.get("/manual.pdf", include_in_schema=False)

@@ -1,5 +1,14 @@
 # Model 3 Manual Assistant
 
+## Final milestone
+
+Start the final review at [submissions/week13/README.md](submissions/week13/README.md).
+It indexes the technical brief, demo runbook, presentation and verification evidence.
+Run `scripts\start.cmd -Mode Demo` for the recorded Sentry Mode presentation at
+http://localhost:8030/app. The API, PostgreSQL and worker execute normally while
+the inference boundary replays a dated answer. The AutoDL deployment remains the
+real-model path. See the report for the scope of each evidence set.
+
 Team **Odie**, course **MAIE6000C: Engineering AI Products — From Prototype to Production**.
 MAIE6000C is the course name. This independent student prototype does not control
 a vehicle or claim affiliation with Tesla.

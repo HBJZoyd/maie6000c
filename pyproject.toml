@@ -33,6 +33,7 @@ include = ["services", "services.*", "scripts", "scripts.*"]
 
 [tool.setuptools.package-data]
 "services.api" = ["web/*.html", "web/*.css", "web/*.js"]
+"scripts" = ["demo_data/*.json", "demo_data/*.pdf"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

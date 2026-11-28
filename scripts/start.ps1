@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('Offline','Remote')][string]$Mode = 'Offline',
+    [ValidateSet('Offline','Remote','Demo')][string]$Mode = 'Offline',
     [ValidatePattern('^[a-z0-9][a-z0-9_-]+$')][string]$ProjectName = 'odie-offline',
     [ValidateRange(1,65535)][int]$ApiPort = 8020,
     [switch]$CheckOnly
@@ -17,6 +17,11 @@ try {
     if ($Mode -eq 'Offline') {
         $composeFile = 'compose.offline.yaml'
         $env:OFFLINE_API_PORT = [string]$ApiPort
+    } elseif ($Mode -eq 'Demo') {
+        $composeFile = 'compose.demo.yaml'
+        if ($ProjectName -eq 'odie-offline') { $ProjectName = 'odie-demo' }
+        if (-not $PSBoundParameters.ContainsKey('ApiPort')) { $ApiPort = 8030 }
+        $env:DEMO_API_PORT = [string]$ApiPort
     } else {
         $composeFile = 'compose.yaml'
         if ($ProjectName -eq 'odie-offline') { $ProjectName = 'maie6000c' }
@@ -33,11 +38,17 @@ try {
     }
     & docker --context default compose -p $ProjectName -f $composeFile up -d --build --wait --wait-timeout 180
     if ($LASTEXITCODE -ne 0) { throw 'Startup failed. Inspect compose ps and logs; no volumes were deleted.' }
-    if ($Mode -eq 'Offline') {
+    if ($Mode -in @('Offline','Demo')) {
         $status = Invoke-RestMethod "http://127.0.0.1:$ApiPort/system/status"
         if ($status.mode -ne 'fixture') { throw 'Expected explicitly labelled fixture backend.' }
-        Write-Host "OFFLINE ENGINEERING FIXTURE: http://localhost:$ApiPort/app"
-        Write-Host 'Answers are synthetic. This does not validate real AI or vehicle instructions.'
+        if ($Mode -eq 'Demo') {
+            if ($status.demo_kind -ne 'recorded-replay') { throw 'Expected recorded demo adapter.' }
+            Write-Host "RECORDED PRESENTATION DEMO: http://localhost:$ApiPort/app"
+            Write-Host 'Select the Sentry Mode scenario. The answer replays a dated recording.'
+        } else {
+            Write-Host "OFFLINE ENGINEERING FIXTURE: http://localhost:$ApiPort/app"
+            Write-Host 'Answers are synthetic. This does not validate real AI or vehicle instructions.'
+        }
     } else {
         Write-Host 'Application started. Check /system/status before submitting a real question.'
     }

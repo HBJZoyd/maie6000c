@@ -1,0 +1,7 @@
+{
+  "api": "ready",
+  "database": "ready",
+  "rag": "ready",
+  "mode": "fixture",
+  "demo_kind": "recorded-replay"
+}

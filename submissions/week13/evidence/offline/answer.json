@@ -1,0 +1,49 @@
+{
+  "id": "f7fe9ac8-df30-439e-866f-cccd20d0b572",
+  "question": "Model 3 如何开启哨兵模式？在家停车时可以自动关闭吗？",
+  "status": "answered",
+  "answer": "【离线工程测试】已完成队列处理和证据保存。这是模拟结果，不提供真实车辆操作指导。",
+  "cite_pages": [
+    1
+  ],
+  "sources": [
+    {
+      "page": 1,
+      "excerpt": "Synthetic fixture for engineering tests only.",
+      "title": "工程测试片段（模拟）",
+      "chunk_id": "eb8cdf2190af2db55535d94824d3a4299adf6f9da19e24a0e8f7e59eedecea4a",
+      "excerpt_sha256": "04aa717fccd626d501300147796f748d19d0fa7a1de45d6dcb81594ff9a78189",
+      "manual_id": "engineering-fixture",
+      "manual_version": "fixture-v2",
+      "document_sha256": "977b2ffa933ae322635d7ff0281c29de04393f9408eb6b4f4da7286895c00573"
+    }
+  ],
+  "answer_type": "answered",
+  "manual": {
+    "manual_id": "engineering-fixture",
+    "manual_version": "fixture-v2",
+    "document_sha256": "977b2ffa933ae322635d7ff0281c29de04393f9408eb6b4f4da7286895c00573",
+    "page_count": 1
+  },
+  "provenance": {
+    "model_id": "fixture-no-model",
+    "index_version": "fixture-v2",
+    "prompt_version": "fixture-v2",
+    "mode": "fixture"
+  },
+  "steps": [
+    {
+      "text": "【离线工程测试】已完成队列处理和证据保存。这是模拟结果，不提供真实车辆操作指导。",
+      "source_ids": [
+        "eb8cdf2190af2db55535d94824d3a4299adf6f9da19e24a0e8f7e59eedecea4a"
+      ]
+    }
+  ],
+  "next_run_at": null,
+  "related_images": [],
+  "error": null,
+  "job_id": 4,
+  "attempts": 1,
+  "created_at": "2026-11-27T14:50:25.774598Z",
+  "updated_at": "2026-11-27T14:50:28.659686Z"
+}

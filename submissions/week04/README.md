@@ -19,4 +19,4 @@ Building on the starter template's three-service architecture (API + Worker + AI
 | Week 7 | End-to-end integration (midterm) | AI Service removes `triage_text()`, replaces with RAG call; `compose.yaml` adds `rag` service definition; smoke tests pass |
 | Week 9 | Testing and observability | Update unit tests (mock RAG calls); update smoke test `ai_label` assertions; RAG service health check endpoints + Prometheus metrics |
 | Week 11 | Performance optimization and fault tolerance | Tune retrieval top-k parameters; increase Worker timeout; RAG service warmstart optimization; GPU/CPU fallback strategy |
-| Week 13 | Final delivery | Complete documentation (`architecture.md`/`architecture_zh.md` + `operations.md` + ADR); final technical brief; AI use statement |
+| Week 13 | Final delivery | Complete documentation (`architecture.md`/`architecture_zh.md` + `operations.md` + ADR); final technical brief |

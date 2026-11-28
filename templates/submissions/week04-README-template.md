@@ -74,7 +74,3 @@ List the supporting artifacts included for this milestone.
 - architecture diagram:
 - API draft:
 - other:
-
-## 12. AI Use Statement
-
-Summarize any generative AI assistance used in preparing this milestone and how the team verified the work.

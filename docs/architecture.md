@@ -1,5 +1,12 @@
 # Architecture: Model 3 Manual Assistant
 
+The final presentation adds an explicitly selected recorded adapter at the AI
+HTTP boundary. `compose.demo.yaml` runs it in a separate project and volumes.
+API, PostgreSQL, worker, evidence validation and persistence retain the same core
+path. `scripts/replay_rag.py` accepts one dated scenario, reports fixture provenance
+and never runs as a silent production fallback. See ADR 0005. Its two-page source
+packet uses demo page numbers while retaining original manual page labels.
+
 Team Odie, MAIE6000C. Current local implementation extends the W07 checkpoint.
 Historical real-AI evidence remains in submissions/week07; current offline
 verification does not repeat or replace that GPU evidence.

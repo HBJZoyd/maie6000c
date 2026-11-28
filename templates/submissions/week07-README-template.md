@@ -66,7 +66,3 @@ What will be completed next, in priority order?
 - slides:
 - screenshots:
 - other:
-
-## 10. AI Use Statement
-
-Summarize any generative AI assistance used in preparing this milestone and how the team verified the work.

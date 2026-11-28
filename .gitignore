@@ -230,6 +230,7 @@ RAG/log/
 artifacts/
 **/.build/
 submissions/week07/CANVAS_SUBMISSION.txt
+submissions/week13/CANVAS_SUBMISSION.txt
 manual-backup.sql
 RAG/runtime/
 RAG/asset-manifest.json
